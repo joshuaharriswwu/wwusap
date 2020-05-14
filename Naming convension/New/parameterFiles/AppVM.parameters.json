@@ -1,0 +1,88 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "applicationSecurityGroupName": {
+      "value": "[APPASG]"
+    },
+    "adminUsername": {
+      "value": "[ADMINUSER]"
+    },
+    "adminPasswordOrKey": {
+      "reference": {
+        "keyVault": {
+          "id": "[KeyVaultID]"
+        },
+        "secretName": "[PASSWORDSECRET]"
+      }
+    },
+    "authenticationType": {
+      "value": "password"
+    },
+    "availabilitySetName": {
+      "value": "as-[SID]ap[ENVTYPE]"
+    },
+    "diagnosticsStorageAccount":
+    {
+      "value": "[DIAGNOSTICSACCOUNT]"
+    },
+    "EnvironmentType":{
+      "value": "[ENVTYPE]"
+    },
+
+    "HasPublicIP": {
+      "value": "[HASPUBLICIP]"
+    },
+    "imageID": {
+      "value": "[ImageID]"
+    },
+    "publisher": {
+      "value": "[PUBLISHER]"
+    },
+    "offer": {
+      "value": "[OFFER]"
+    },
+    "sku": {
+      "value": "[SKU]"
+    },
+    "version": {
+      "value": "[VERSION]"
+    },
+    "location": {
+      "value": "[LOCATION]"
+    },
+    "PrivateIP": {
+      "value": [""]
+    },
+    "proximityPlacementGroupName": {
+      "value": "pp-[SID][ENVTYPE]"
+    },
+    "sapSystemId": {
+      "value": "[SID]"
+    },
+    "subnetName": {
+      "value": "[AppSubnetName]"
+    },
+    "virtualMachineName": {
+      "value": "[SERVERNAME]"
+    },
+    "virtualMachineSize": {
+      "value": "[MACHINESIZE]"
+    },
+    "virtualMachineCount": {
+      "value": "[VMCount]"
+    },
+    "virtualNetworkName": {
+      "value": "[VNetName]"
+    },
+    "virtualNetworkResourceGroupName": {
+      "value": "[VNetRG]"
+    },
+    "virtualMachineTagValues": {
+      "value": { "System": "SAP", "$perfOptimizationLevel": "1" }
+    },
+    "Zone": {
+      "value": []
+    }
+  }
+}

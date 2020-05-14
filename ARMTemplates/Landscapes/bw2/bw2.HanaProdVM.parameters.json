@@ -1,0 +1,86 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adminUsername": {
+      "value": "localadmin"
+    },
+    "authenticationType": {
+      "value": "password"
+    },
+    "adminPasswordOrKey": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/c8f03d99-7739-4924-b2a7-5b65bcb69481/resourceGroups/RG-SAPPRE-KV/providers/Microsoft.KeyVault/vaults/KV-SAPPREUKW"
+        },
+        "secretName": "localadmin"
+      }
+    },
+    "applicationSecurityGroupName": {
+      "value": "ASG-SAPDBPRDUKW"
+    },
+    "availabilitySetName": {
+      "value": "as-bw2dbpre"
+    },
+    "diagnosticsStorageAccount": {
+      "value": "sasapbootpreukw"
+    },
+    "EnvironmentType":{
+      "value": "pre"
+    },
+    "HasPublicIP": {
+      "value": false
+    },
+    "imageID": {
+      "value": ""
+    },
+    "location": {
+      "value": "ukwest"
+    },
+    "privateIP": {
+      "value": [""]
+    },
+    "proximityPlacementGroupName": {
+      "value": "pp-bw2pre"
+    },
+    "publisher": {
+      "value": "suse"
+    },
+    "offer": {
+      "value": "sles-15-sp1"
+    },
+    "sku": {
+      "value": "gen1"
+    },
+    "version": {
+      "value": "latest"
+    },
+    "sapSystemId": {
+      "value": "bw2"
+    },
+    "virtualMachineCount": {
+      "value": 2
+    },
+    "virtualMachineName": {
+      "value": "db"
+    },
+    "virtualMachineSize": {
+      "value": "Standard_M32ts"
+    },
+    "virtualNetworkResourceGroupName": {
+      "value": "RG-SAPPREPROD"
+    },
+    "virtualNetworkName": {
+      "value": "VNET-SAPPREPRODUKW"
+    },
+    "subnetName": {
+      "value": "DB01"
+    },
+    "virtualMachineTagValues": {
+      "value": { "System": "SAP", "$perfOptimizationLevel": "1" }
+    },
+    "Zone": {
+      "value": []
+    }
+  }
+}

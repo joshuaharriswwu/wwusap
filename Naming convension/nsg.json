@@ -1,0 +1,67 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2017-10-01",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "ds-uks-hub-rdsecure-sg",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "allow-connection-to-kms",
+                        "properties": {
+                            "description": "allow-connection-to-kms",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRanges": [
+                                "1688"
+    
+                            ],
+                            "sourceAddressPrefix": "10.251.7.96/27",
+                            "destinationAddressPrefixes": [
+                                "10.50.1.89/32", 
+                                "10.50.1.214/32", 
+                                "10.60.100.232/32", 
+                                "23.102.135.246/32"
+
+                            ],
+                            "access": "Allow",
+                            "priority": 970,
+                            "direction": "outbound"
+                        }
+                    }, 
+
+                 {
+                        "name": "allow-connection-to-azurebackup",
+                        "properties": {
+                            "description": "allow-connection-to-azurebackup",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRanges": "*",
+    
+    
+                            "sourceAddressPrefix": "10.251.7.96/27",
+                            "destinationAddressPrefixes": [
+                                "azurebackup"
+
+                            ],
+                            "access": "Allow",
+                            "priority": 980,
+                            "direction": "outbound"
+                        }
+                    } 
+
+
+
+
+
+                ]
+            }
+        }
+    ],
+    "outputs": {}
+}
