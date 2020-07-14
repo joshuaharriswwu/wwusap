@@ -6,12 +6,11 @@ Used to deploy:
 
 DEV, QA, Pre-Production, Production landscapes. 
 
-Deployment steps: 
+•	Clone repo to visual studio code
 
-Clone repo to visual studio code
+•	Populate createNewEnvironment.ps1 and execute to generate landscape parameter files
 
-Populate createNewEnvironment.ps1 and execite to generaate landscape parameter files
+•	Within Visual Studio Code authenticate to Azure and select target subscription where the resources are to be deployed 
 
-Execute [SID]\deploylandscape.ps1 to deploy landscape
+•	Execute [SID]\deploylandscape
 
-Sync to Github 
