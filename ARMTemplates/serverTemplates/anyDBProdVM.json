@@ -243,7 +243,7 @@
         "nrOfDisks": "[variables('diskSizes')[parameters('dbSize')].nrDisks]",
         "applicationSecurityGroupID": "[resourceId(parameters('virtualNetworkResourceGroupName'),'Microsoft.Network/applicationSecurityGroups',parameters('applicationSecurityGroupName'))]",
         "loadBalancerName": "[concat('lb-std',variables('sapSystemIdLower'),'db', parameters('EnvironmentType'))]",
-        "github": "https://raw.githubusercontent.com/joshuaharriswwu/wwusap/master/ARMTemplates/serverTemplates",
+        "github": "https://raw.githubusercontent.com/joshuaharriswwu/wwusap/master/ARMTemplates/serverTemplates/",
         "customImage": "[if(greater(length(trim(parameters('imageID'))),2),parameters('imageID'),'')]"
 
 
