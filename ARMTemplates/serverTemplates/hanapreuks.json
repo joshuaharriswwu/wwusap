@@ -1,0 +1,201 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+
+    "VirtualMachineName": {
+      "type": "string"
+    },
+
+    "subnetname": {
+      "type": "string",
+      "metadata": {
+        "description": "Choose a Subnet"
+      },
+      "defaultValue": "DB01",
+      "allowedValues": [
+        "APP01",
+        "DB01",
+        "WEB01"
+      ]
+    },
+
+    "HanaVMUsername": {
+      "type": "string"
+    },
+    "HanaadminPassword": {
+      "type": "secureString"
+    }
+  },
+  "variables": {
+    "vnetId": "/subscriptions/c8f03d99-7739-4924-b2a7-5b65bcb69481/resourceGroups/RG-SAPPREPROD/providers/Microsoft.Network/virtualNetworks/VNET-SAPPREPRODuks",
+    
+    "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
+    "networkinterfacename": "[concat(parameters('VirtualMachineName'), '-NIC01')]"
+
+
+  },
+  "resources": [
+    {
+      "name": "[concat(parameters('VirtualMachineName'), '-NIC01')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2018-04-01",
+      "location": "uk south",
+      "dependsOn": [],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              },
+              "privateIPAllocationMethod": "Dynamic"
+            }
+          }
+        ]
+
+      },
+      "tags": {
+        "Environment": "PREPROD",
+        "Business Owner": "Bernie Murphy",
+        "Department": "IT",
+        "Cost Centre": "B726"
+      }
+    },
+
+
+    {
+      "name": "[parameters('VirtualMachineName')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2018-06-01",
+      "location": "uk south",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', parameters('VirtualMachineName'), '-nic01')]"
+      ],
+      "properties": 
+      
+        
+      {
+        "hardwareProfile": {
+          "vmSize": "Standard_e20ds_v4"
+        },
+
+
+           
+  
+
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "SUSE",
+            "offer": "SLES-SAP",
+            "sku": "15",
+            "version": "2019.11.15"
+          },
+          "dataDisks": [
+            {
+              "name": "[concat(parameters('VirtualMachineName'), '-data01')]",
+              "diskSizeGB": 128,
+              "lun": 0,
+              "createOption": "Empty"
+             
+
+
+            },
+
+
+
+            {
+              "name": "[concat(parameters('VirtualMachineName'), '-data02')]",
+              "diskSizeGB": 128,
+              "lun": 1,
+              "createOption": "Empty"
+              
+
+
+
+            },
+
+            {
+              "name": "[concat(parameters('VirtualMachineName'), '-data03')]",
+              "diskSizeGB": 128,
+              "lun": 2,
+              "createOption": "Empty"
+
+            },
+            {
+              "name": "[concat(parameters('VirtualMachineName'), '-log01')]",
+              "diskSizeGB": 80,
+              "lun": 3,
+              "createOption": "Empty"
+            },
+              {
+              "name": "[concat(parameters('VirtualMachineName'), '-log02')]",
+              "diskSizeGB": 80,
+              "lun": 4,
+              "createOption": "Empty"
+
+            },
+            {
+              "name": "[concat(parameters('VirtualMachineName'), '-shared01')]",
+              "diskSizeGB": 256,
+              "lun": 5,
+              "createOption": "Empty"
+
+            },
+                {
+              "name": "[concat(parameters('VirtualMachineName'), '-sap01')]",
+              "diskSizeGB": 64,
+              "lun": 6,
+              "createOption": "Empty"
+
+            }
+         
+          ],
+          "osDisk": {
+            "name": "[concat(parameters('VirtualMachineName'), '-DISKOS')]",
+            "diskSizeGB": 64,
+            "createOption": "FromImage",
+            "managedDisk": {
+              "storageAccountType": "Premium_LRS"
+               
+            }
+          }
+
+        },
+        
+
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]"
+            }
+          ]
+        },
+        "osProfile": {
+          "computerName": "[parameters('VirtualMachineName')]",
+          "adminUsername": "[parameters('HanaVMUsername')]",
+          "adminPassword": "[parameters('HanaadminPassword')]"
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": true,
+            "storageUri": "[concat('https://', 'sasapbootpreuks', '.blob.core.windows.net/')]"
+          }
+        }
+      },
+      "tags": {
+        "Environment": "PREPROD",
+        "Business Owner": "Bernie Murphy",
+        "Department": "IT",
+        "Cost Centre": "B726"
+      }
+    }
+  ],
+  "outputs": {
+    "HanaVMUsername": {
+      "type": "string",
+      "value": "[parameters('HanaVMUsername')]"
+    }
+  }
+}

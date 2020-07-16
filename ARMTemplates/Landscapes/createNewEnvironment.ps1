@@ -1,4 +1,4 @@
-$SID = "bw2"
+$SID = "sh2"
 $region = "ukwest"
 
 $subscriptionID = "c8f03d99-7739-4924-b2a7-5b65bcb69481"
@@ -66,7 +66,7 @@ $ASCSServerImageID = ""
 $ASCSVMSize = "Standard_D2s_v3"
 
 #How many Application Servers are needed
-$NumberOfAppServers = 3
+$NumberOfAppServers = 2
 #Marketplace Template Information for the Application Server
 #If ImageID is provided then these fields will be ignored
 $AppPublisher = "suse"
@@ -90,9 +90,9 @@ $NumberOfDatabaseServers = 2
 
 #If ImageID is provided then these fields will be ignored
 $DBPublisher = "suse"
-$DBOffer = "sles-15-sp1"
-$DBSKU = "gen1"
-$DBSKUVersion = "latest"
+$DBOffer = "SLES-SAP"
+$DBSKU = "15"
+$DBSKUVersion = "2019.11.15"
 #VM Size for the database server
 #If you want to use a marketplace image $xxxxxImageID needs to be an empty string
 #Custom image ID

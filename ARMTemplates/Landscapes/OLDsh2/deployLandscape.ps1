@@ -1,9 +1,9 @@
 # select subscription
 
-$ResourceGroupName = "rg-bw2pre"
+$ResourceGroupName = "rg-sh2pre"
 $location = "ukwest"
 $subscriptionID = "c8f03d99-7739-4924-b2a7-5b65bcb69481"
-$SID = "bw2"
+$SID = "sh2"
 $applicationSecurityGroupName = "ASG-SAPAPPRDUKW"
 $dbSecurityGroupName = "ASG-SAPDBPRDUKW"
 $virtualNetworkResourceGroupName = "RG-SAPPREPROD"
@@ -11,8 +11,8 @@ $virtualNetworkName = "VNET-SAPPREPRODUKW"
 
 
 $curDirName = Split-Path $pwd -Leaf  
-if ($curDirName.ToLower() -ne ("bw2").ToLower()) {
-    Write-Host "Please run the script from the bw2 folder"
+if ($curDirName.ToLower() -ne ("sh2").ToLower()) {
+    Write-Host "Please run the script from the sh2 folder"
     exit 
 }
 
@@ -80,7 +80,7 @@ if (!$rg) {
 Write-Host "Provisioning the Database Server(s)"
 
 Write-Host "Creating Db Server(s)"
-$res = New-AzResourceGroupDeployment -Name "DbServer_Creation" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\hanaProdVM.json -TemplateParameterFile .\bw2.hanaProdVM.parameters.json 
+$res = New-AzResourceGroupDeployment -Name "DbServer_Creation" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\hanaProdVM.json -TemplateParameterFile .\sh2.hanaProdVM.parameters.json 
 if ($res.ProvisioningState -ne "Succeeded") { 
   Write-Error -Message "The deployment failed" 
 }
@@ -89,7 +89,7 @@ if ($res.ProvisioningState -ne "Succeeded") {
 Write-Host "Provisioning the ASCS Server(s)"
 
 Write-Host "Creating ASCS Server(s)"
-$res = New-AzResourceGroupDeployment -Name "ASCSServer_Creation" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\ASCSVM.json -TemplateParameterFile .\bw2.ASCSVM.parameters.json 
+$res = New-AzResourceGroupDeployment -Name "ASCSServer_Creation" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\ASCSVM.json -TemplateParameterFile .\sh2.ASCSVM.parameters.json 
 if ($res.ProvisioningState -ne "Succeeded") { 
   Write-Error -Message "The deployment failed" 
 }
@@ -98,19 +98,19 @@ if ($res.ProvisioningState -ne "Succeeded") {
 Write-Host "Provisioning the Application Server(s)"
 
 Write-Host "Creating App Server(s)"
-$res = New-AzResourceGroupDeployment -Name "AppServer_Creation-app" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\AppVM.json -TemplateParameterFile .\bw2.AppVM.parameters.json 
+$res = New-AzResourceGroupDeployment -Name "AppServer_Creation-app" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\AppVM.json -TemplateParameterFile .\sh2.AppVM.parameters.json 
 if ($res.ProvisioningState -ne "Succeeded") { 
   Write-Error -Message "The deployment failed" 
 }
 
 
-#Write-Host "Provisioning the Web Dispatch Server(s)"
+Write-Host "Provisioning the Web Dispatch Server(s)"
 
-#Write-Host "Creating Web Dispatch Server(s)"
-#$res = New-AzResourceGroupDeployment -Name "WebServer_Creation-webdisp" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\WDVM.json -TemplateParameterFile .\bw2.WDVM.parameters.json 
-#if ($res.ProvisioningState -ne "Succeeded") { 
-#  Write-Error -Message "The deployment failed" 
-#}
+Write-Host "Creating Web Dispatch Server(s)"
+$res = New-AzResourceGroupDeployment -Name "WebServer_Creation-webdisp" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\WDVM.json -TemplateParameterFile .\sh2.WDVM.parameters.json 
+if ($res.ProvisioningState -ne "Succeeded") { 
+  Write-Error -Message "The deployment failed" 
+}
 
 
 Write-Host "Deployment finished: " (Get-Date).ToString("yyyy-MM-dd HH:mm")

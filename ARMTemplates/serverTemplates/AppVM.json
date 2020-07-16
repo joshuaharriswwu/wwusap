@@ -144,7 +144,7 @@
         }
     },
     "variables": {
-        "osType": "[if(equals(toLower(parameters('offer')),'WindowsServer'),'Windows','Linux')]",
+        "osType": "[if(equals(toLower(parameters('offer')),'windowsserver'),'Windows','Linux')]",
         "sapSystemIdLower": "[toLower(parameters('sapSystemId'))]",
         "locationName": "[if(empty(parameters('location')) , resourceGroup().location,parameters('location'))]",
         "sapMachineNameOld": "[concat(variables('sapSystemIdLower'),'-',parameters('virtualMachineName'))]",

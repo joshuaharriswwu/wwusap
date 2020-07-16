@@ -47,13 +47,13 @@
       "value": "suse"
     },
     "offer": {
-      "value": "sles-15-sp1"
+      "value": "SLES-SAP"
     },
     "sku": {
-      "value": "gen1"
+      "value": "15"
     },
     "version": {
-      "value": "latest"
+      "value": "2019.11.15"
     },
     "sapSystemId": {
       "value": "sh2"

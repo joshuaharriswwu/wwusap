@@ -70,7 +70,7 @@
       "value": "Standard_D4s_v3"
     },
     "virtualMachineCount": {
-      "value": 3
+      "value": 2
     },
     "virtualNetworkName": {
       "value": "VNET-SAPPREPRODUKW"

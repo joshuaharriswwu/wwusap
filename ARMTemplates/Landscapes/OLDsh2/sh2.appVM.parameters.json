@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "applicationSecurityGroupName": {
-      "value": "ASG-SAPAPPRDUKw"
+      "value": "ASG-SAPAPPRDUKW"
     },
     "adminUsername": {
       "value": "localadmin"
@@ -20,7 +20,7 @@
       "value": "password"
     },
     "availabilitySetName": {
-      "value": "as-bw2appre"
+      "value": "as-sh2appre"
     },
     "diagnosticsStorageAccount":
     {
@@ -55,10 +55,10 @@
       "value": [""]
     },
     "proximityPlacementGroupName": {
-      "value": "pp-bw2pre"
+      "value": "pp-sh2pre"
     },
     "sapSystemId": {
-      "value": "bw2"
+      "value": "sh2"
     },
     "subnetName": {
       "value": "APP01"
@@ -70,7 +70,7 @@
       "value": "Standard_D4s_v3"
     },
     "virtualMachineCount": {
-      "value": 2
+      "value": 3
     },
     "virtualNetworkName": {
       "value": "VNET-SAPPREPRODUKW"

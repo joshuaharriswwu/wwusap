@@ -58,7 +58,7 @@
       "value": ""
     },
     "virtualMachineCount": {
-      "value": 3
+      "value": 2
     },
     "applicationSecurityGroupName": {
       "value": "ASG-SAPAPPRDUKW"
