@@ -104,13 +104,13 @@ if ($res.ProvisioningState -ne "Succeeded") {
 }
 
 
-#Write-Host "Provisioning the Web Dispatch Server(s)"
+Write-Host "Provisioning the Web Dispatch Server(s)"
 
-#Write-Host "Creating Web Dispatch Server(s)"
-#$res = New-AzResourceGroupDeployment -Name "WebServer_Creation-webdisp" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\WDVM.json -TemplateParameterFile .\sh2.WDVM.parameters.json 
-#if ($res.ProvisioningState -ne "Succeeded") { 
-#  Write-Error -Message "The deployment failed" 
-#}
+Write-Host "Creating Web Dispatch Server(s)"
+$res = New-AzResourceGroupDeployment -Name "WebServer_Creation-webdisp" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\WDVM.json -TemplateParameterFile .\sh2.WDVM.parameters.json 
+if ($res.ProvisioningState -ne "Succeeded") { 
+  Write-Error -Message "The deployment failed" 
+}
 
 
 Write-Host "Deployment finished: " (Get-Date).ToString("yyyy-MM-dd HH:mm")
