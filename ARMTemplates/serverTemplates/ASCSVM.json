@@ -133,11 +133,11 @@
         }
     },
     "variables": {
-        "osType": "[if(equals(toLower(parameters('offer')),'WindowsServer'),'Windows','Linux')]",
+        "osType": "[if(equals(toLower(parameters('offer')),'windowsserver'),'Windows','Linux')]",
         "sapSystemIdLower": "[toLower(parameters('sapSystemId'))]",
         "locationName": "[if(empty(parameters('location')) , resourceGroup().location,parameters('location'))]",
-        "sapMachineName": "[concat('az',if(equals(variables('osType'),'Windows'),'w','l'),parameters('sapSystemId'),'ascs', parameters('EnvironmentType'))]",
-        "avSetName": "[if(empty(parameters('availabilitySetName')), concat('as-',variables('sapSystemIdLower'),'ascs', parameters('EnvironmentType')),parameters('availabilitySetName'))]",
+        "sapMachineName": "[concat('az',if(equals(variables('osType'),'Windows'),'w','l'),parameters('sapSystemId'),'cs', parameters('EnvironmentType'))]",
+        "avSetName": "[if(empty(parameters('availabilitySetName')), concat('as-',variables('sapSystemIdLower'),'cs', parameters('EnvironmentType')),parameters('availabilitySetName'))]",
         "ppgName": "[if(empty(parameters('proximityPlacementGroupName')), concat('ppg-',variables('sapSystemIdLower')),parameters('proximityPlacementGroupName'))]",
         "vnetID": "[resourceid(parameters('virtualNetworkResourceGroupName') ,'Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
