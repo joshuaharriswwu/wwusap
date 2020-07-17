@@ -136,7 +136,7 @@
         }
     },
     "variables": {
-        "osType": "[if(equals(toLower(parameters('offer')),'WindowsServer'),'Windows','Linux')]",
+        "osType": "[if(equals(toLower(parameters('offer')),'windowsserver'),'Windows','Linux')]",
         "sapSystemIdLower": "[toLower(parameters('sapSystemId'))]",
         "locationName": "[if(empty(parameters('location')) , resourceGroup().location,parameters('location'))]",
         "sapMachineName": "[concat('az',if(equals(variables('osType'),'Windows'),'w','l'),parameters('sapSystemId'),'web', parameters('EnvironmentType'))]",

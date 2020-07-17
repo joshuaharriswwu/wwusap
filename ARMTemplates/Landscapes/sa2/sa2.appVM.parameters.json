@@ -1,0 +1,88 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "applicationSecurityGroupName": {
+      "value": "ASG-SAPAPPRDUKW"
+    },
+    "adminUsername": {
+      "value": "localadmin"
+    },
+    "adminPasswordOrKey": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/c8f03d99-7739-4924-b2a7-5b65bcb69481/resourceGroups/RG-SAPPRE-KV/providers/Microsoft.KeyVault/vaults/KV-SAPPREUKW"
+        },
+        "secretName": "localadmin"
+      }
+    },
+    "authenticationType": {
+      "value": "password"
+    },
+    "availabilitySetName": {
+      "value": "as-sa2appre"
+    },
+    "diagnosticsStorageAccount":
+    {
+      "value": "sasapbootpreukw"
+    },
+    "EnvironmentType":{
+      "value": "pre"
+    },
+
+    "HasPublicIP": {
+      "value": false
+    },
+    "imageID": {
+      "value": ""
+    },
+    "publisher": {
+      "value": "MicrosoftWindowsServer"
+    },
+    "offer": {
+      "value": "WindowsServer"
+    },
+    "sku": {
+      "value": "2016-Datacenter"
+    },
+    "version": {
+      "value": "latest"
+    },
+    "location": {
+      "value": "ukwest"
+    },
+    "PrivateIP": {
+      "value": [""]
+    },
+    "proximityPlacementGroupName": {
+      "value": "pp-sa2pre"
+    },
+    "sapSystemId": {
+      "value": "sa2"
+    },
+    "subnetName": {
+      "value": "APP01"
+    },
+    "virtualMachineName": {
+      "value": "app"
+    },
+    "virtualMachineSize": {
+      "value": "Standard_D4s_v3"
+    },
+    "virtualMachineCount": {
+      "value": 2
+    },
+    "virtualNetworkName": {
+      "value": "VNET-SAPPREPRODUKW"
+    },
+    "virtualNetworkResourceGroupName": {
+      "value": "RG-SAPPREPROD"
+    },
+    "virtualMachineTagValues": {
+      "value": { "System": "SAP", "$perfOptimizationLevel": "1" }
+    },
+    "Zone": {
+      "value": []
+    }
+  }
+}
