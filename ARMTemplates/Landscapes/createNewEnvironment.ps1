@@ -1,4 +1,4 @@
-$SID = "sa2"
+$SID = "sh2"
 $region = "ukwest"
 
 $subscriptionID = "c8f03d99-7739-4924-b2a7-5b65bcb69481"
@@ -82,7 +82,7 @@ $AppSKUVersion = "latest"
 $AppServerImageID = ""
 
 #VM Size for the application server
-$AppVMSize = "Standard_D4s_v3"
+$AppVMSize = "Standard_E4s_v3"
 
 #How many DB Servers are needed
 $NumberOfDatabaseServers = 2
@@ -90,14 +90,14 @@ $NumberOfDatabaseServers = 2
 
 #If ImageID is provided then these fields will be ignored
 $DBPublisher = "suse"
-$DBOffer = "SLES-SAP"
-$DBSKU = "15"
-$DBSKUVersion = "2019.11.15"
+$DBOffer = "sles-sap-15-sp1"
+$DBSKU = "gen1"
+$DBSKUVersion = "2020.06.10"
 #VM Size for the database server
 #If you want to use a marketplace image $xxxxxImageID needs to be an empty string
 #Custom image ID
 $DBServerImageID = ""
-$DBVMSize = "Standard_M32ts"
+$DBVMSize = "Standard_M32ls"
 
 #This only applies for AnyDB
 $DBSize = "51200"

@@ -320,7 +320,7 @@
                         "storageAccountType": null,
                         "sku": "Premium_LRS",
                         "properties": {
-                            "diskSizeGB": 511,
+                            "diskSizeGB": 64,
                             "creationData": {
                                 "createOption": "empty"
                             }
@@ -336,7 +336,7 @@
                         "storageAccountType": null,
                         "sku": "Premium_LRS",
                         "properties": {
-                            "diskSizeGB": 511,
+                            "diskSizeGB": 64,
                             "creationData": {
                                 "createOption": "empty"
                             }
@@ -352,23 +352,25 @@
                         "storageAccountType": null,
                         "sku": "Premium_LRS",
                         "properties": {
-                            "diskSizeGB": 511,
+                            "diskSizeGB": 64,
                             "creationData": {
                                 "createOption": "empty"
                             }
                         }
                     },
-                    {
-                        "lun": 3,
+{
+
+
+                         "lun": 3,
                         "createOption": "attach",
                         "caching": "None",
-                        "writeAcceleratorEnabled": true,
+                        "writeAcceleratorEnabled": false,
                         "id": null,
-                        "name": "-log1",
+                        "name": "-data4",
                         "storageAccountType": null,
                         "sku": "Premium_LRS",
                         "properties": {
-                            "diskSizeGB": 511,
+                            "diskSizeGB": 64,
                             "creationData": {
                                 "createOption": "empty"
                             }
@@ -380,11 +382,11 @@
                         "caching": "None",
                         "writeAcceleratorEnabled": true,
                         "id": null,
-                        "name": "-log2",
+                        "name": "-log1",
                         "storageAccountType": null,
                         "sku": "Premium_LRS",
                         "properties": {
-                            "diskSizeGB": 511,
+                            "diskSizeGB": 128,
                             "creationData": {
                                 "createOption": "empty"
                             }
@@ -393,30 +395,31 @@
                     {
                         "lun": 5,
                         "createOption": "attach",
-                        "caching": "ReadOnly",
-                        "writeAcceleratorEnabled": false,
+                        "caching": "None",
+                        "writeAcceleratorEnabled": true,
                         "id": null,
-                        "name": "-shared",
+                        "name": "-log2",
                         "storageAccountType": null,
                         "sku": "Premium_LRS",
                         "properties": {
-                            "diskSizeGB": 511,
+                            "diskSizeGB": 128,
                             "creationData": {
                                 "createOption": "empty"
                             }
                         }
                     },
-                    {
+
+                      {
                         "lun": 6,
                         "createOption": "attach",
-                        "caching": "ReadOnly",
-                        "writeAcceleratorEnabled": false,
+                        "caching": "None",
+                        "writeAcceleratorEnabled": true,
                         "id": null,
-                        "name": "-sap",
+                        "name": "-log3",
                         "storageAccountType": null,
                         "sku": "Premium_LRS",
                         "properties": {
-                            "diskSizeGB": 63,
+                            "diskSizeGB": 128,
                             "creationData": {
                                 "createOption": "empty"
                             }
@@ -425,19 +428,36 @@
                     {
                         "lun": 7,
                         "createOption": "attach",
-                        "caching": "None",
+                        "caching": "ReadOnly",
                         "writeAcceleratorEnabled": false,
                         "id": null,
-                        "name": "-backup",
+                        "name": "-shared1",
                         "storageAccountType": null,
                         "sku": "Premium_LRS",
                         "properties": {
-                            "diskSizeGB": 511,
+                            "diskSizeGB": 512,
+                            "creationData": {
+                                "createOption": "empty"
+                            }
+                        }
+                    },
+                    {
+                        "lun": 8,
+                        "createOption": "attach",
+                        "caching": "ReadOnly",
+                        "writeAcceleratorEnabled": false,
+                        "id": null,
+                        "name": "-sap1",
+                        "storageAccountType": null,
+                        "sku": "Premium_LRS",
+                        "properties": {
+                            "diskSizeGB": 64,
                             "creationData": {
                                 "createOption": "empty"
                             }
                         }
                     }
+                   
                 ]
             },
             "Standard_M64ls": {

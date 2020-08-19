@@ -1,0 +1,423 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "loadBalancers_lb_stdbw2ascspre_name": {
+            "defaultValue": "lb-stdbw2ascspre",
+            "type": "String"
+        },
+        "virtualNetworks_VNET_SAPPREPRODUKW_externalid": {
+            "defaultValue": "/subscriptions/c8f03d99-7739-4924-b2a7-5b65bcb69481/resourceGroups/RG-SAPPREPROD/providers/Microsoft.Network/virtualNetworks/VNET-SAPPREPRODUKW",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/loadBalancers",
+            "apiVersion": "2020-05-01",
+            "name": "[parameters('loadBalancers_lb_stdbw2ascspre_name')]",
+            "location": "ukwest",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_stdbw2ascspre_name'), concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-backend'))]"
+            ],
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "frontendIPConfigurations": [
+                    {
+                        "name": "[concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-frontend')]",
+                        "properties": {
+                            "privateIPAddress": "10.10.110.13",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[concat(parameters('virtualNetworks_VNET_SAPPREPRODUKW_externalid'), '/subnets/APP01')]"
+                            },
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    },
+                    {
+                        "name": "[concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs')]",
+                        "properties": {
+                            "privateIPAddress": "10.10.110.22",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[concat(parameters('virtualNetworks_VNET_SAPPREPRODUKW_externalid'), '/subnets/APP01')]"
+                            },
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    },
+                    {
+                        "name": "[concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ers')]",
+                        "properties": {
+                            "privateIPAddress": "10.10.110.23",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[concat(parameters('virtualNetworks_VNET_SAPPREPRODUKW_externalid'), '/subnets/APP01')]"
+                            },
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "backendAddressPools": [
+                    {
+                        "name": "[concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-backend')]",
+                        "properties": {
+                            "loadBalancerBackendAddresses": [
+                                {
+                                    "name": "rg-bw2pre_azlbw2ascspre02-nic01ipconfig1",
+                                    "properties": {}
+                                },
+                                {
+                                    "name": "rg-bw2pre_azlbw2ascspre01-nic01ipconfig1",
+                                    "properties": {}
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "loadBalancingRules": [
+                    {
+                        "name": "lbrule3200",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/frontendIPConfigurations/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs'))]"
+                            },
+                            "frontendPort": 3200,
+                            "backendPort": 3200,
+                            "enableFloatingIP": true,
+                            "idleTimeoutInMinutes": 30,
+                            "protocol": "Tcp",
+                            "enableTcpReset": false,
+                            "loadDistribution": "Default",
+                            "disableOutboundSnat": false,
+                            "backendAddressPool": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_stdbw2ascspre_name'), concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-backend'))]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/probes/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs-healthprobe'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "lbrule3600",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/frontendIPConfigurations/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs'))]"
+                            },
+                            "frontendPort": 3600,
+                            "backendPort": 3600,
+                            "enableFloatingIP": true,
+                            "idleTimeoutInMinutes": 30,
+                            "protocol": "Tcp",
+                            "enableTcpReset": false,
+                            "loadDistribution": "Default",
+                            "disableOutboundSnat": false,
+                            "backendAddressPool": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_stdbw2ascspre_name'), concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-backend'))]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/probes/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs-healthprobe'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "lbrule3900",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/frontendIPConfigurations/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs'))]"
+                            },
+                            "frontendPort": 3900,
+                            "backendPort": 3900,
+                            "enableFloatingIP": true,
+                            "idleTimeoutInMinutes": 30,
+                            "protocol": "Tcp",
+                            "enableTcpReset": false,
+                            "loadDistribution": "Default",
+                            "disableOutboundSnat": false,
+                            "backendAddressPool": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_stdbw2ascspre_name'), concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-backend'))]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/probes/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs-healthprobe'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "lbrule50013",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/frontendIPConfigurations/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs'))]"
+                            },
+                            "frontendPort": 50013,
+                            "backendPort": 50013,
+                            "enableFloatingIP": true,
+                            "idleTimeoutInMinutes": 30,
+                            "protocol": "Tcp",
+                            "enableTcpReset": false,
+                            "loadDistribution": "Default",
+                            "disableOutboundSnat": false,
+                            "backendAddressPool": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_stdbw2ascspre_name'), concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-backend'))]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/probes/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs-healthprobe'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "lbrule50014",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/frontendIPConfigurations/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs'))]"
+                            },
+                            "frontendPort": 50014,
+                            "backendPort": 50014,
+                            "enableFloatingIP": true,
+                            "idleTimeoutInMinutes": 30,
+                            "protocol": "Tcp",
+                            "enableTcpReset": false,
+                            "loadDistribution": "Default",
+                            "disableOutboundSnat": false,
+                            "backendAddressPool": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_stdbw2ascspre_name'), concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-backend'))]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/probes/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs-healthprobe'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "lbrule50016",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/frontendIPConfigurations/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs'))]"
+                            },
+                            "frontendPort": 50016,
+                            "backendPort": 50016,
+                            "enableFloatingIP": true,
+                            "idleTimeoutInMinutes": 30,
+                            "protocol": "Tcp",
+                            "enableTcpReset": false,
+                            "loadDistribution": "Default",
+                            "disableOutboundSnat": false,
+                            "backendAddressPool": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_stdbw2ascspre_name'), concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-backend'))]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/probes/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs-healthprobe'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "lbrule8100",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/frontendIPConfigurations/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs'))]"
+                            },
+                            "frontendPort": 8100,
+                            "backendPort": 8100,
+                            "enableFloatingIP": true,
+                            "idleTimeoutInMinutes": 30,
+                            "protocol": "Tcp",
+                            "enableTcpReset": false,
+                            "loadDistribution": "Default",
+                            "disableOutboundSnat": false,
+                            "backendAddressPool": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_stdbw2ascspre_name'), concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-backend'))]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/probes/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs-healthprobe'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "lbrule51013",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/frontendIPConfigurations/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ers'))]"
+                            },
+                            "frontendPort": 51013,
+                            "backendPort": 51013,
+                            "enableFloatingIP": true,
+                            "idleTimeoutInMinutes": 30,
+                            "protocol": "Tcp",
+                            "enableTcpReset": false,
+                            "loadDistribution": "Default",
+                            "disableOutboundSnat": false,
+                            "backendAddressPool": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_stdbw2ascspre_name'), concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-backend'))]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/probes/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ers-healthprobe'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "lbrule51014",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/frontendIPConfigurations/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ers'))]"
+                            },
+                            "frontendPort": 51014,
+                            "backendPort": 51014,
+                            "enableFloatingIP": true,
+                            "idleTimeoutInMinutes": 30,
+                            "protocol": "Tcp",
+                            "enableTcpReset": false,
+                            "loadDistribution": "Default",
+                            "disableOutboundSnat": false,
+                            "backendAddressPool": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_stdbw2ascspre_name'), concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-backend'))]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/probes/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ers-healthprobe'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "lbrule5985",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/frontendIPConfigurations/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs'))]"
+                            },
+                            "frontendPort": 5985,
+                            "backendPort": 5985,
+                            "enableFloatingIP": true,
+                            "idleTimeoutInMinutes": 30,
+                            "protocol": "Tcp",
+                            "enableTcpReset": false,
+                            "loadDistribution": "Default",
+                            "disableOutboundSnat": false,
+                            "backendAddressPool": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_stdbw2ascspre_name'), concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-backend'))]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/probes/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs-healthprobe'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "lbrule445",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/frontendIPConfigurations/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs'))]"
+                            },
+                            "frontendPort": 445,
+                            "backendPort": 445,
+                            "enableFloatingIP": true,
+                            "idleTimeoutInMinutes": 30,
+                            "protocol": "Tcp",
+                            "enableTcpReset": false,
+                            "loadDistribution": "Default",
+                            "disableOutboundSnat": false,
+                            "backendAddressPool": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_stdbw2ascspre_name'), concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-backend'))]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/probes/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs-healthprobe'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "lbrule8000",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/frontendIPConfigurations/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs'))]"
+                            },
+                            "frontendPort": 8000,
+                            "backendPort": 8000,
+                            "enableFloatingIP": true,
+                            "idleTimeoutInMinutes": 30,
+                            "protocol": "Tcp",
+                            "enableTcpReset": false,
+                            "loadDistribution": "Default",
+                            "disableOutboundSnat": false,
+                            "backendAddressPool": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_stdbw2ascspre_name'), concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-backend'))]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/probes/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs-healthprobe'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "lbrule44300",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/frontendIPConfigurations/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs'))]"
+                            },
+                            "frontendPort": 44300,
+                            "backendPort": 44300,
+                            "enableFloatingIP": true,
+                            "idleTimeoutInMinutes": 30,
+                            "protocol": "Tcp",
+                            "enableTcpReset": false,
+                            "loadDistribution": "Default",
+                            "disableOutboundSnat": false,
+                            "backendAddressPool": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_stdbw2ascspre_name'), concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-backend'))]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name')), concat('/probes/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs-healthprobe'))]"
+                            }
+                        }
+                    }
+                ],
+                "probes": [
+                    {
+                        "name": "[concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-healthprobe')]",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "port": 62503,
+                            "intervalInSeconds": 5,
+                            "numberOfProbes": 2
+                        }
+                    },
+                    {
+                        "name": "[concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ascs-healthprobe')]",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "port": 62504,
+                            "intervalInSeconds": 5,
+                            "numberOfProbes": 2
+                        }
+                    },
+                    {
+                        "name": "[concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '-ers-healthprobe')]",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "port": 62505,
+                            "intervalInSeconds": 5,
+                            "numberOfProbes": 2
+                        }
+                    }
+                ],
+                "inboundNatRules": [],
+                "outboundRules": [],
+                "inboundNatPools": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/loadBalancers/backendAddressPools",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('loadBalancers_lb_stdbw2ascspre_name'), '/', parameters('loadBalancers_lb_stdbw2ascspre_name'), '-backend')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_stdbw2ascspre_name'))]"
+            ],
+            "properties": {
+                "loadBalancerBackendAddresses": [
+                    {
+                        "name": "rg-bw2pre_azlbw2ascspre02-nic01ipconfig1",
+                        "properties": {}
+                    },
+                    {
+                        "name": "rg-bw2pre_azlbw2ascspre01-nic01ipconfig1",
+                        "properties": {}
+                    }
+                ]
+            }
+        }
+    ]
+}

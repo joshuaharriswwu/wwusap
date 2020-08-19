@@ -64,7 +64,7 @@
       "value": "ASG-SAPAPPRDUKW"
     },
     "virtualMachineSize": {
-      "value": "Standard_D4s_v3"
+      "value": "Standard_E4s_v3"
     },
     "virtualMachineName": {
       "value": "webdisp"

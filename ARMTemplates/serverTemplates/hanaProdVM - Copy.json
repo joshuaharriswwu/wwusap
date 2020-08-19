@@ -235,7 +235,6 @@
         "nrOfDisks": "[variables('diskSizes')[variables('sku')].nrDisks]",
         "applicationSecurityGroupID": "[resourceId(parameters('virtualNetworkResourceGroupName'),'Microsoft.Network/applicationSecurityGroups',parameters('applicationSecurityGroupName'))]",
         "loadBalancerName": "[concat('lb-std',variables('sapSystemIdLower'),'db', parameters('EnvironmentType'))]",
-        "loadBalancerNamepub": "[concat('lb-stdpub',variables('sapSystemIdLower'),'db', parameters('EnvironmentType'))]",
         "github": "https://raw.githubusercontent.com/joshuaharriswwu/wwusap/master/ARMTemplates/serverTemplates/",
         "customImage": "[if(greater(length(trim(parameters('imageID'))),2),parameters('imageID'),'')]"
 
@@ -342,22 +341,6 @@
             }
         },
         {
-            "name": "[concat('pip-lb',variables('sapMachineName'))]",
-            "type": "Microsoft.Network/publicIpAddresses",
-            "apiVersion": "2019-02-01",
-            "location": "[variables('locationName')]",
-            "zones": "[if(empty(parameters('Zone')), '', json(concat('[',if(greater(length(parameters('Zone')),1),parameters('Zone')[mod(copyIndex(0),2)],parameters('Zone')[0]),']')) )]",
-         
-            "properties": {
-                "publicIpAllocationMethod": "Static"
-            },
-            "sku": {
-                "name": "Standard"
-            }
-
-        },
-
-        {
             "name": "[concat('pip-',variables('sapMachineName'),padLeft(copyIndex(1),2,'0'))]",
             "type": "Microsoft.Network/publicIpAddresses",
             "apiVersion": "2019-02-01",
@@ -374,63 +357,7 @@
                 "count": "[parameters('virtualMachineCount')]",
                 "name": "pipLoop"
             }
-
         },
-
-        {
-            "name": "[variables('loadBalancerNamepub')]",
-            "type": "Microsoft.Network/loadBalancers",
-            "apiVersion": "2018-12-01",
-
-            "location": "[variables('locationName')]",
-            "sku": {
-                "name": "Standard"
-            },
-            "properties": {
-                "frontendIPConfigurations": [
-                    {
-                        "name": "[concat(variables('loadBalancerNamepub'),'-frontend')]",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat('pip-lb',variables('sapMachineName')))]"
-                            },
-                            
-                            "privateIPAddressVersion": "IPv4"
-                        }
-                    }
-                ],
-                "backendAddressPools": [
-                    {
-                        "name": "[concat(variables('loadBalancerNamepub'),'-backend')]"
-                    }
-                ],
-                "loadBalancingRules": [],
-                "probes": [],
-                "inboundNatRules": [],
-                "outboundRules": [
-                    {
-                        "name": "allow-all-out",
-                        "properties": {
-                            "allocatedOutboundPorts": 10664,
-                            "protocol": "All",
-                            "enableTcpReset": true,
-                            "idleTimeoutInMinutes": 4,
-                            "backendAddressPool": {
-                               "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadBalancerNamePub'),concat(variables('loadBalancerNamePub'),'-backend'))]"
-                            },
-                            "frontendIPConfigurations": [
-                                {
-                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerNamePub')), '/frontendIPConfigurations/',concat(variables('loadBalancerNamePub'),'-frontend'))]"
-                                }
-                            ]
-                        }
-                    }
-                ]
-
-            }
-        },
-
         {
             "name": "[concat(variables('sapMachineName'),padLeft(copyIndex(1),2,'0'), '-nic01')]",
             "type": "Microsoft.Network/networkInterfaces",
@@ -438,7 +365,6 @@
             "location": "[variables('locationName')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
-                "[resourceId('Microsoft.Network/loadBalancers/', variables('loadBalancerNamepub'))]",
                 "[concat('pip-',variables('sapMachineName'),padLeft(copyIndex(1),2,'0'))]"
             ],
             "properties": {
@@ -454,7 +380,7 @@
                             "primary": true,
                             "privateIPAddressVersion": "IPv4",
                             "applicationSecurityGroups": "[if(not(empty(parameters('applicationSecurityGroupName'))),json(concat('[{ \"id\" : \"',variables('applicationSecurityGroupID'),'\"}]')), json('null'))]",
-                            "loadBalancerBackendAddressPools": "[if(greater(parameters('virtualMachineCount'),1),json(concat('[{ \"id\" : \"',resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadBalancerName'), concat(variables('loadBalancerName'),'-backend')),'\"}, { \"id\" : \"',resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadBalancerNamepub'), concat(variables('loadBalancerNamepub'),'-backend')),'\"}]')), json('null'))]"
+                            "loadBalancerBackendAddressPools": "[if(greater(parameters('virtualMachineCount'),1),json(concat('[{ \"id\" : \"',resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadBalancerName'), concat(variables('loadBalancerName'),'-backend')),'\"}]')), json('null'))]"
                         }
                     }
                 ],

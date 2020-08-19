@@ -47,13 +47,13 @@
       "value": "suse"
     },
     "offer": {
-      "value": "SLES-SAP"
+      "value": "sles-sap-15-sp1"
     },
     "sku": {
-      "value": "15"
+      "value": "gen1"
     },
     "version": {
-      "value": "2019.11.15"
+      "value": "2020.06.10"
     },
     "sapSystemId": {
       "value": "sh2"
@@ -65,7 +65,7 @@
       "value": "db"
     },
     "virtualMachineSize": {
-      "value": "Standard_M32ts"
+      "value": "Standard_M32ls"
     },
     "virtualNetworkResourceGroupName": {
       "value": "RG-SAPPREPROD"
