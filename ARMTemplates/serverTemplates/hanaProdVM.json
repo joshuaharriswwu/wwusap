@@ -181,7 +181,7 @@
             },
             "Standard_M32ls": {
                 "osdiskSizeGB": 63,
-                "nrDisks": 8,
+                "nrDisks": 9,
                 "lvm": "hana-lvm-3datadisks2logdisks.sh"
             },
             "Standard_M64ls": {
@@ -342,7 +342,7 @@
             }
         },
         {
-            "name": "[concat('pip-lb',variables('sapMachineName'))]",
+            "name": "[concat('pip-',variables('loadBalancerNamepub'))]",
             "type": "Microsoft.Network/publicIpAddresses",
             "apiVersion": "2019-02-01",
             "location": "[variables('locationName')]",
@@ -379,6 +379,10 @@
 
         {
             "name": "[variables('loadBalancerNamepub')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIpAddresses/', tolower(concat('pip-',variables('loadBalancerNamePub'))))]"
+            ],
+
             "type": "Microsoft.Network/loadBalancers",
             "apiVersion": "2018-12-01",
 
@@ -393,13 +397,14 @@
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat('pip-lb',variables('sapMachineName')))]"
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat('pip-',variables('loadBalancerNamepub')))]"
                             },
                             
                             "privateIPAddressVersion": "IPv4"
                         }
                     }
                 ],
+                
                 "backendAddressPools": [
                     {
                         "name": "[concat(variables('loadBalancerNamepub'),'-backend')]"
