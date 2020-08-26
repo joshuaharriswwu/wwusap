@@ -63,10 +63,10 @@ $ASCSSKUVersion = "latest"
 #Custom image ID
 $ASCSServerImageID = ""
 #VM Size for the ASCS server
-$ASCSVMSize = "Standard_D2s_v3"
+$ASCSVMSize = "Standard_DS2_v2"
 
 #How many Application Servers are needed
-$NumberOfAppServers = 2
+$NumberOfAppServers = 1
 #Marketplace Template Information for the Application Server
 #If ImageID is provided then these fields will be ignored
 $AppPublisher = "suse"
@@ -82,10 +82,10 @@ $AppSKUVersion = "latest"
 $AppServerImageID = ""
 
 #VM Size for the application server
-$AppVMSize = "Standard_DS2_v2"
+$AppVMSize = "Standard_E4s_v3"
 
 #How many DB Servers are needed
-$NumberOfDatabaseServers = 2
+$NumberOfDatabaseServers = 1
 #Marketplace Template Information for the Database Server
 
 #If ImageID is provided then these fields will be ignored

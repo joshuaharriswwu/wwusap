@@ -1,9 +1,9 @@
 # select subscription
 
-$ResourceGroupName = "rg-gr2pre"
+$ResourceGroupName = "rg-sl2pre"
 $location = "ukwest"
 $subscriptionID = "c8f03d99-7739-4924-b2a7-5b65bcb69481"
-$SID = "gr2"
+$SID = "sl2"
 $applicationSecurityGroupName = "ASG-SAPAPPRDUKW"
 $dbSecurityGroupName = "ASG-SAPDBPRDUKW"
 $virtualNetworkResourceGroupName = "RG-SAPPREPROD"
@@ -11,8 +11,8 @@ $virtualNetworkName = "VNET-SAPPREPRODUKW"
 
 
 $curDirName = Split-Path $pwd -Leaf  
-if ($curDirName.ToLower() -ne ("gr2").ToLower()) {
-    Write-Host "Please run the script from the gr2 folder"
+if ($curDirName.ToLower() -ne ("sl2").ToLower()) {
+    Write-Host "Please run the script from the sl2 folder"
     exit 
 }
 
@@ -80,10 +80,11 @@ if (!$rg) {
 Write-Host "Provisioning the Database Server(s)"
 
 Write-Host "Creating Db Server(s)"
-$res = New-AzResourceGroupDeployment -Name "DbServer_Creation" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\hanaProdVM.json -TemplateParameterFile .\gr2.hanaProdVM.parameters.json 
+$res = New-AzResourceGroupDeployment -Name "DbServer_Creation" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\hanaProdVM.json -TemplateParameterFile .\sl2.hanaProdVM.parameters.json 
 if ($res.ProvisioningState -ne "Succeeded") { 
   Write-Error -Message "The deployment failed" 
 }
+
 
 
 
@@ -91,10 +92,11 @@ if ($res.ProvisioningState -ne "Succeeded") {
 Write-Host "Provisioning the Application Server(s)"
 
 Write-Host "Creating App Server(s)"
-$res = New-AzResourceGroupDeployment -Name "AppServer_Creation-app" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\AppVM.json -TemplateParameterFile .\gr2.AppVM.parameters.json 
+$res = New-AzResourceGroupDeployment -Name "AppServer_Creation-app" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\AppVM.json -TemplateParameterFile .\sl2.AppVM.parameters.json 
 if ($res.ProvisioningState -ne "Succeeded") { 
   Write-Error -Message "The deployment failed" 
 }
+
 
 
 

@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "sapSystemId": {
-      "value": "gr2"
+      "value": "sl2"
     },
     "adminUsername": {
       "value": "localadmin"
@@ -20,7 +20,7 @@
       }
     },
     "availabilitySetName": {
-      "value": "as-gr2webpre"
+      "value": "as-sl2webpre"
     },
     "location": {
       "value": "ukwest"
@@ -40,7 +40,7 @@
       "value": [""]
     },
     "proximityPlacementGroupName": {
-      "value": "pp-gr2pre"
+      "value": "pp-sl2pre"
     },
     "publisher": {
       "value": "MicrosoftWindowsServer"

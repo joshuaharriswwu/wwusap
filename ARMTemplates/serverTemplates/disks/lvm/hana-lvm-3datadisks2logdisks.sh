@@ -65,4 +65,4 @@ fs_uuid=$(blkid -o value -s UUID /dev/usrsap-vg01/usrsap-lv01)
 echo "/dev/disk/by-uuid/$fs_uuid /usr/sap  xfs  defaults,barrier=0,nofail  0  2" | sudo tee -a /etc/fstab
  
 # Mount the new filesystems
-sudo mount -a -updated
+sudo mount -a 

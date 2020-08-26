@@ -64,7 +64,7 @@
       "value": "ASG-SAPAPPRDUKW"
     },
     "virtualMachineSize": {
-      "value": "Standard_D2s_v3"
+      "value": "Standard_DS2_v2"
     },
     "virtualMachineName": {
       "value": "ascs"
