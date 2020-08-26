@@ -315,7 +315,7 @@
                         }
                     }
                 ],
-                "enableAcceleratedNetworking": false
+                "enableAcceleratedNetworking": true
             },
             "copy": {
                 "count": "[parameters('virtualMachineCount')]",
