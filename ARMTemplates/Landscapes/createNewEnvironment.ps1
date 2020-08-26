@@ -1,4 +1,4 @@
-$SID = "sh2"
+$SID = "gr2"
 $region = "ukwest"
 
 $subscriptionID = "c8f03d99-7739-4924-b2a7-5b65bcb69481"
@@ -52,7 +52,7 @@ Add-Type -TypeDefinition @"
 [DBType]$Database = [DBType]::HanaProd
 
 #How many ASCS Servers are needed
-$NumberOfASCSServers = 2
+$NumberOfASCSServers = 0
 #Marketplace Template Information for the ASCS Server
 #If ImageID is provided then these fields will be ignored
 $ASCSPublisher = "MicrosoftWindowsServer"
@@ -82,7 +82,7 @@ $AppSKUVersion = "latest"
 $AppServerImageID = ""
 
 #VM Size for the application server
-$AppVMSize = "Standard_E4s_v3"
+$AppVMSize = "Standard_DS2_v2"
 
 #How many DB Servers are needed
 $NumberOfDatabaseServers = 2
