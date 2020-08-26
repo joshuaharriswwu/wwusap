@@ -67,7 +67,7 @@
       "value": "app"
     },
     "virtualMachineSize": {
-      "value": "Standard_DS2_v2"
+      "value": "Standard_E4s_v3"
     },
     "virtualMachineCount": {
       "value": 2
