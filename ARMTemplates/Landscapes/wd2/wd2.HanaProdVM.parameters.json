@@ -2,11 +2,11 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "applicationSecurityGroupName": {
-      "value": "ASG-SAPAPPRDUKW"
-    },
     "adminUsername": {
       "value": "localadmin"
+    },
+    "authenticationType": {
+      "value": "password"
     },
     "adminPasswordOrKey": {
       "reference": {
@@ -16,67 +16,65 @@
         "secretName": "localadmin"
       }
     },
-    "authenticationType": {
-      "value": "password"
+    "applicationSecurityGroupName": {
+      "value": "ASG-SAPDBPRDUKW"
     },
     "availabilitySetName": {
-      "value": "as-bo2appre"
+      "value": "as-wd2dbpre"
     },
-    "diagnosticsStorageAccount":
-    {
+    "diagnosticsStorageAccount": {
       "value": "sasapbootpreukw"
     },
     "EnvironmentType":{
       "value": "pre"
     },
-
     "HasPublicIP": {
       "value": false
     },
     "imageID": {
       "value": ""
     },
-    "publisher": {
-      "value": "MicrosoftWindowsServer"
-    },
-    "offer": {
-      "value": "WindowsServer"
-    },
-    "sku": {
-      "value": "2016-Datacenter"
-    },
-    "version": {
-      "value": "latest"
-    },
     "location": {
       "value": "ukwest"
     },
-    "PrivateIP": {
+    "privateIP": {
       "value": [""]
     },
     "proximityPlacementGroupName": {
-      "value": "pp-bo2pre"
+      "value": "pp-wd2pre"
+    },
+    "publisher": {
+      "value": "suse"
+    },
+    "offer": {
+      "value": "sles-sap-15-sp1"
+    },
+    "sku": {
+      "value": "gen1"
+    },
+    "version": {
+      "value": "2020.06.10"
     },
     "sapSystemId": {
-      "value": "bo2"
-    },
-    "subnetName": {
-      "value": "APP01"
-    },
-    "virtualMachineName": {
-      "value": "app"
-    },
-    "virtualMachineSize": {
-      "value": "Standard_E4s_v3"
+      "value": "wd2"
     },
     "virtualMachineCount": {
       "value": 2
     },
-    "virtualNetworkName": {
-      "value": "VNET-SAPPREPRODUKW"
+    "virtualMachineName": {
+      "value": "db"
+    },
+    "virtualMachineSize": {
+      "value": "Standard_M32ls"
     },
     "virtualNetworkResourceGroupName": {
       "value": "RG-SAPPREPROD"
+    },
+    "virtualNetworkName": {
+      "value": "VNET-SAPPREPRODUKW"
+    },
+    "subnetName": {
+      "value": "DB01"
     },
     "virtualMachineTagValues": {
       "value": { "System": "SAP", "$perfOptimizationLevel": "1" }

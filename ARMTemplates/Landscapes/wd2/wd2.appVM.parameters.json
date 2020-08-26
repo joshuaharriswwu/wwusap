@@ -20,7 +20,7 @@
       "value": "password"
     },
     "availabilitySetName": {
-      "value": "as-bo2appre"
+      "value": "as-wd2appre"
     },
     "diagnosticsStorageAccount":
     {
@@ -55,10 +55,10 @@
       "value": [""]
     },
     "proximityPlacementGroupName": {
-      "value": "pp-bo2pre"
+      "value": "pp-wd2pre"
     },
     "sapSystemId": {
-      "value": "bo2"
+      "value": "wd2"
     },
     "subnetName": {
       "value": "APP01"

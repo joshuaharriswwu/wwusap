@@ -103,7 +103,8 @@
             "allowedValues": [
                 "Standard_D2s_v3",
                 "Standard_D4s_v3",
-                "Standard_D8s_v3"
+                "Standard_D8s_v3",
+                "Standard_E4s_v3"
             ],
             "defaultValue": "Standard_D2s_v3"
 
@@ -321,7 +322,7 @@
                         }
                     }
                 ],
-                "enableAcceleratedNetworking": false
+                "enableAcceleratedNetworking": true
             },
             "copy": {
                 "count": "[parameters('virtualMachineCount')]",

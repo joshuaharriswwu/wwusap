@@ -59,7 +59,7 @@
       "value": "bo2"
     },
     "virtualMachineCount": {
-      "value": 1
+      "value": 2
     },
     "virtualMachineName": {
       "value": "db"
