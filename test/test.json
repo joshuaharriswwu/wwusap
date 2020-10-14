@@ -1,0 +1,115 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "KeyVault_Name": {
+            "type": "string"
+        },
+        "AdminOID": {
+            "type": "s"
+        },
+        "ReaderOID": {
+            "type": "8ed0b4cd-0961-4863-8022-3c37afb90a2b"
+        }, 
+            "VirtualMachineName": {
+      "type": "string"
+    },
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2016-10-01",
+            "name": "KV-SAPPRDUKW",
+            "location": "ukwest",
+            "tags": {
+                "Cost Centre": "B726",
+                "department": "IT",
+                "Business Owner": "Bernie Murphy"
+            },
+            "properties": {
+                "sku": {
+                    "family": "A",
+                    "name": "Standard"
+                },
+                "tenantId": "2cd3b1ff-8e30-4ec8-8ee9-c267371956dd",
+                "accessPolicies": [
+                    {
+                        "tenantId": "2cd3b1ff-8e30-4ec8-8ee9-c267371956dd",
+                        "objectId": "[parameters('AdminOID')]",
+                        "permissions": {
+                            "keys": [
+                                "Get",
+                                "List",
+                                "Update",
+                                "Create",
+                                "Import",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore",
+                                "Decrypt",
+                                "Encrypt",
+                                "UnwrapKey",
+                                "WrapKey",
+                                "Verify",
+                                "Sign",
+                                "Purge"
+                            ],
+                            "secrets": [
+                                "Get",
+                                "List",
+                                "Set",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore",
+                                "Purge"
+                            ],
+                            "certificates": []
+                        }
+                    },
+                    {
+                        "tenantId": "2cd3b1ff-8e30-4ec8-8ee9-c267371956dd",
+                        "objectId": "[parameters('ReaderOID')]",
+                        "permissions": {
+                            "keys": [],
+                            "secrets": [
+                                "Get",
+                                "List"
+                            ],
+                            "certificates": []
+                        }
+                    }
+                ],
+                "enabledForDeployment": false,
+                "enabledForDiskEncryption": false,
+                "enabledForTemplateDeployment": false
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/providers/roleAssignments",
+            "apiVersion": "2019-04-01-preview",
+            "name": "[concat(parameters('KeyVault_Name'), '/Microsoft.Authorization/', guid(uniqueString(parameters('ReaderOID'))))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('KeyVault_Name'))]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'acdd72a7-3385-48ef-bd42-f606fba81ae7')]",
+                "principalId": "[parameters('ReaderOID')]"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/providers/roleAssignments",
+            "apiVersion": "2019-04-01-preview",
+            "name": "[concat(parameters('KeyVault_Name'), '/Microsoft.Authorization/', guid(uniqueString(parameters('AdminOID'))))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('KeyVault_Name'))]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'f25e0fa2-a7c8-4377-a976-54943a77a395')]",
+                "principalId": "[parameters('AdminOID')]"
+            }
+        }
+    ]
+}

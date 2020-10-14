@@ -1,18 +1,18 @@
 # select subscription
 
-$ResourceGroupName = "rg-sh1prf"
+$ResourceGroupName = "rg-sh1prd"
 $location = "ukwest"
-$subscriptionID = "c8f03d99-7739-4924-b2a7-5b65bcb69481"
+$subscriptionID = "9617cacf-d020-4b6e-bdf4-5afeea0f3843"
 $SID = "sh1"
 $applicationSecurityGroupName = "ASG-SAPAPPRDUKW"
 $dbSecurityGroupName = "ASG-SAPDBPRDUKW"
-$virtualNetworkResourceGroupName = "RG-SAPPREPROD"
-$virtualNetworkName = "VNET-SAPPREPRODUKW"
+$virtualNetworkResourceGroupName = "RG-SAPPROD"
+$virtualNetworkName = "VNET-SAPPRODUKW"
 
 
 $curDirName = Split-Path $pwd -Leaf  
-if ($curDirName.ToLower() -ne ("cc2").ToLower()) {
-    Write-Host "Please run the script from the cc2 folder"
+if ($curDirName.ToLower() -ne ("sh1").ToLower()) {
+    Write-Host "Please run the script from the sh1 folder"
     exit 
 }
 
@@ -77,18 +77,31 @@ if (!$rg) {
 #     exit
 # }
 
+Write-Host "Provisioning the Database Server(s)"
+
+Write-Host "Creating Db Server(s)"
+$res = New-AzResourceGroupDeployment -Name "DbServer_Creation" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\hanaProdVM.json -TemplateParameterFile .\sh1.hanaProdVM.parameters.json 
+if ($res.ProvisioningState -ne "Succeeded") { 
+  Write-Error -Message "The deployment failed" 
+}
 
 
+Write-Host "Provisioning the ASCS Server(s)"
+
+Write-Host "Creating ASCS Server(s)"
+$res = New-AzResourceGroupDeployment -Name "ASCSServer_Creation" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\ASCSVM.json -TemplateParameterFile .\sh1.ASCSVM.parameters.json 
+if ($res.ProvisioningState -ne "Succeeded") { 
+  Write-Error -Message "The deployment failed" 
+}
 
 
 Write-Host "Provisioning the Application Server(s)"
 
 Write-Host "Creating App Server(s)"
-$res = New-AzResourceGroupDeployment -Name "AppServer_Creation-app" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\AppVM.json -TemplateParameterFile .\cc2.AppVM.parameters.json 
+$res = New-AzResourceGroupDeployment -Name "AppServer_Creation-app" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\AppVM.json -TemplateParameterFile .\sh1.AppVM.parameters.json 
 if ($res.ProvisioningState -ne "Succeeded") { 
   Write-Error -Message "The deployment failed" 
 }
-
 
 
 

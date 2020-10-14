@@ -1,0 +1,1034 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "networkSecurityGroups_BRC_UKS_AD1_nsg_name": {
+            "defaultValue": "BRC-UKS-AD1-nsg",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name')]",
+            "location": "ukwest",
+            "tags": {
+                "Application": "Unknown",
+                "Cost centre": "Unknown",
+                "Criticality": "Unknown",
+                "Environment": "Unknown",
+                "Owner": "Unknown"
+            },
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "allow-ad-in",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "access": "Allow",
+                            "priority": 1000,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "123",
+                                "135",
+                                "464",
+                                "389",
+                                "3268",
+                                "53",
+                                "88",
+                                "445",
+                                "32000-65535",
+                                "63",
+                                "80",
+                                "137",
+                                "138",
+                                "139",
+                                "5355",
+                                "443",
+                                "636",
+                                "3269",
+                                "25",
+                                "5722",
+                                "9389",
+                                "67",
+                                "2535",
+                                "42"
+                            ],
+                            "sourceAddressPrefixes": [
+                                "10.0.0.0/8",
+                                "172.16.0.0/12",
+                                "192.168.0.0/16"
+                            ],
+                            "destinationAddressPrefixes": [
+                                "10.101.0.4",
+                                "10.101.0.5"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "allow-dc-in",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "access": "Allow",
+                            "priority": 1100,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [
+                                "10.53.6.16",
+                                "10.53.6.11",
+                                "10.44.8.128",
+                                "172.16.1.13",
+                                "10.101.0.4",
+                                "10.101.0.5",
+                                "10.101.0.4",
+                                "10.101.0.5"
+                            ],
+                            "destinationAddressPrefixes": [
+                                "10.53.6.16",
+                                "10.53.6.11",
+                                "10.44.8.128",
+                                "172.16.1.13",
+                                "10.101.0.4",
+                                "10.101.0.5",
+                                "10.101.0.4",
+                                "10.101.0.5"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "allow-icmp-in",
+                        "properties": {
+                            "protocol": "ICMP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "destinationAddressPrefix": "10.101.0.0/27",
+                            "access": "Allow",
+                            "priority": 1200,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [
+                                "10.0.0.0/8",
+                                "172.16.0.0/12",
+                                "192.168.0.0/16"
+                            ],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "allow-azurebackup-in",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "AzureBackup",
+                            "destinationAddressPrefix": "10.101.0.0/27",
+                            "access": "Allow",
+                            "priority": 1300,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "allow-internalsubnet-in",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "10.101.0.0/27",
+                            "destinationAddressPrefix": "10.101.0.0/27",
+                            "access": "Allow",
+                            "priority": 3950,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "allow-azurelb",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "AzureLoadBalancer",
+                            "destinationAddressPrefix": "10.101.0.0/27",
+                            "access": "Allow",
+                            "priority": 4095,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "block-all-in",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 4096,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "allow-ad-ephemeral-in",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "1024-5000",
+                            "access": "Allow",
+                            "priority": 1050,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [
+                                "10.0.0.0/8",
+                                "172.16.0.0/12",
+                                "192.168.0.0/16"
+                            ],
+                            "destinationAddressPrefixes": [
+                                "10.101.0.4",
+                                "10.101.0.5"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "allow-azurecloud-in",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "AzureCloud",
+                            "destinationAddressPrefix": "10.101.0.0/27",
+                            "access": "Allow",
+                            "priority": 1400,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "allow-rdp-in",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "3389",
+                            "destinationAddressPrefix": "10.101.0.0/27",
+                            "access": "Allow",
+                            "priority": 1500,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [
+                                "10.0.0.0/8",
+                                "172.16.0.0/12",
+                                "192.168.0.0/16"
+                            ],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "block-all-out",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 4096,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "allow-azurelb-out",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "10.101.0.0/27",
+                            "destinationAddressPrefix": "AzureLoadBalancer",
+                            "access": "Allow",
+                            "priority": 4095,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "allow-internalsubnet-out",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "10.101.0.0/27",
+                            "destinationAddressPrefix": "10.101.0.0/27",
+                            "access": "Allow",
+                            "priority": 3950,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "allow-rdp-out",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "3389",
+                            "sourceAddressPrefix": "10.101.0.0/27",
+                            "access": "Allow",
+                            "priority": 1500,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": [
+                                "10.0.0.0/8",
+                                "172.16.0.0/12",
+                                "192.168.0.0/16"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "allow-azurecloud-out",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "10.101.0.0/27",
+                            "destinationAddressPrefix": "AzureCloud",
+                            "access": "Allow",
+                            "priority": 1400,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "allow-azurebackup-out",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "10.101.0.0/27",
+                            "destinationAddressPrefix": "AzureBackup",
+                            "access": "Allow",
+                            "priority": 1300,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "allow-icmp-out",
+                        "properties": {
+                            "protocol": "ICMP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "10.101.0.0/27",
+                            "access": "Allow",
+                            "priority": 1200,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": [
+                                "10.0.0.0/8",
+                                "172.16.0.0/12",
+                                "192.168.0.0/16"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "allow-dc-out",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "access": "Allow",
+                            "priority": 1100,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [
+                                "10.53.6.16",
+                                "10.53.6.11",
+                                "10.44.8.128",
+                                "172.16.1.13",
+                                "10.101.0.4",
+                                "10.101.0.5",
+                                "10.101.0.4",
+                                "10.101.0.5"
+                            ],
+                            "destinationAddressPrefixes": [
+                                "10.53.6.16",
+                                "10.53.6.11",
+                                "10.44.8.128",
+                                "172.16.1.13",
+                                "10.101.0.4",
+                                "10.101.0.5",
+                                "10.101.0.4",
+                                "10.101.0.5"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "allow-ad-ephemeral-out",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "1024-5000",
+                            "access": "Allow",
+                            "priority": 1050,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [
+                                "10.101.0.4",
+                                "10.101.0.5"
+                            ],
+                            "destinationAddressPrefixes": [
+                                "10.0.0.0/8",
+                                "172.16.0.0/12",
+                                "192.168.0.0/16"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "allow-ad-out",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "access": "Allow",
+                            "priority": 1000,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [
+                                "123",
+                                "135",
+                                "464",
+                                "389",
+                                "3268",
+                                "53",
+                                "88",
+                                "445",
+                                "32000-65535",
+                                "63",
+                                "80",
+                                "137",
+                                "138",
+                                "139",
+                                "5355",
+                                "443",
+                                "636",
+                                "3269",
+                                "25",
+                                "5722",
+                                "9389",
+                                "67",
+                                "2535",
+                                "42"
+                            ],
+                            "sourceAddressPrefixes": [
+                                "10.101.0.4",
+                                "10.101.0.5"
+                            ],
+                            "destinationAddressPrefixes": [
+                                "10.0.0.0/8",
+                                "172.16.0.0/12",
+                                "192.168.0.0/16"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-ad-ephemeral-in')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "1024-5000",
+                "access": "Allow",
+                "priority": 1050,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [
+                    "10.0.0.0/8",
+                    "172.16.0.0/12",
+                    "192.168.0.0/16"
+                ],
+                "destinationAddressPrefixes": [
+                    "10.101.0.4",
+                    "10.101.0.5"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-ad-ephemeral-out')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "1024-5000",
+                "access": "Allow",
+                "priority": 1050,
+                "direction": "Outbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [
+                    "10.101.0.4",
+                    "10.101.0.5"
+                ],
+                "destinationAddressPrefixes": [
+                    "10.0.0.0/8",
+                    "172.16.0.0/12",
+                    "192.168.0.0/16"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-ad-in')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "access": "Allow",
+                "priority": 1000,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [
+                    "123",
+                    "135",
+                    "464",
+                    "389",
+                    "3268",
+                    "53",
+                    "88",
+                    "445",
+                    "32000-65535",
+                    "63",
+                    "80",
+                    "137",
+                    "138",
+                    "139",
+                    "5355",
+                    "443",
+                    "636",
+                    "3269",
+                    "25",
+                    "5722",
+                    "9389",
+                    "67",
+                    "2535",
+                    "42"
+                ],
+                "sourceAddressPrefixes": [
+                    "10.0.0.0/8",
+                    "172.16.0.0/12",
+                    "192.168.0.0/16"
+                ],
+                "destinationAddressPrefixes": [
+                    "10.101.0.4",
+                    "10.101.0.5"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-ad-out')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "access": "Allow",
+                "priority": 1000,
+                "direction": "Outbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [
+                    "123",
+                    "135",
+                    "464",
+                    "389",
+                    "3268",
+                    "53",
+                    "88",
+                    "445",
+                    "32000-65535",
+                    "63",
+                    "80",
+                    "137",
+                    "138",
+                    "139",
+                    "5355",
+                    "443",
+                    "636",
+                    "3269",
+                    "25",
+                    "5722",
+                    "9389",
+                    "67",
+                    "2535",
+                    "42"
+                ],
+                "sourceAddressPrefixes": [
+                    "10.101.0.4",
+                    "10.101.0.5"
+                ],
+                "destinationAddressPrefixes": [
+                    "10.0.0.0/8",
+                    "172.16.0.0/12",
+                    "192.168.0.0/16"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-azurebackup-in')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "sourceAddressPrefix": "AzureBackup",
+                "destinationAddressPrefix": "10.101.0.0/27",
+                "access": "Allow",
+                "priority": 1300,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-azurebackup-out')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "sourceAddressPrefix": "10.101.0.0/27",
+                "destinationAddressPrefix": "AzureBackup",
+                "access": "Allow",
+                "priority": 1300,
+                "direction": "Outbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-azurecloud-in')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "sourceAddressPrefix": "AzureCloud",
+                "destinationAddressPrefix": "10.101.0.0/27",
+                "access": "Allow",
+                "priority": 1400,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-azurecloud-out')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "sourceAddressPrefix": "10.101.0.0/27",
+                "destinationAddressPrefix": "AzureCloud",
+                "access": "Allow",
+                "priority": 1400,
+                "direction": "Outbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-azurelb')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "sourceAddressPrefix": "AzureLoadBalancer",
+                "destinationAddressPrefix": "10.101.0.0/27",
+                "access": "Allow",
+                "priority": 4095,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-azurelb-out')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "sourceAddressPrefix": "10.101.0.0/27",
+                "destinationAddressPrefix": "AzureLoadBalancer",
+                "access": "Allow",
+                "priority": 4095,
+                "direction": "Outbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-dc-in')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "access": "Allow",
+                "priority": 1100,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [
+                    "10.53.6.16",
+                    "10.53.6.11",
+                    "10.44.8.128",
+                    "172.16.1.13",
+                    "10.101.0.4",
+                    "10.101.0.5",
+                    "10.101.0.4",
+                    "10.101.0.5"
+                ],
+                "destinationAddressPrefixes": [
+                    "10.53.6.16",
+                    "10.53.6.11",
+                    "10.44.8.128",
+                    "172.16.1.13",
+                    "10.101.0.4",
+                    "10.101.0.5",
+                    "10.101.0.4",
+                    "10.101.0.5"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-dc-out')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "access": "Allow",
+                "priority": 1100,
+                "direction": "Outbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [
+                    "10.53.6.16",
+                    "10.53.6.11",
+                    "10.44.8.128",
+                    "172.16.1.13",
+                    "10.101.0.4",
+                    "10.101.0.5",
+                    "10.101.0.4",
+                    "10.101.0.5"
+                ],
+                "destinationAddressPrefixes": [
+                    "10.53.6.16",
+                    "10.53.6.11",
+                    "10.44.8.128",
+                    "172.16.1.13",
+                    "10.101.0.4",
+                    "10.101.0.5",
+                    "10.101.0.4",
+                    "10.101.0.5"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-icmp-in')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "ICMP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "destinationAddressPrefix": "10.101.0.0/27",
+                "access": "Allow",
+                "priority": 1200,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [
+                    "10.0.0.0/8",
+                    "172.16.0.0/12",
+                    "192.168.0.0/16"
+                ],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-icmp-out')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "ICMP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "sourceAddressPrefix": "10.101.0.0/27",
+                "access": "Allow",
+                "priority": 1200,
+                "direction": "Outbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": [
+                    "10.0.0.0/8",
+                    "172.16.0.0/12",
+                    "192.168.0.0/16"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-internalsubnet-in')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "sourceAddressPrefix": "10.101.0.0/27",
+                "destinationAddressPrefix": "10.101.0.0/27",
+                "access": "Allow",
+                "priority": 3950,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-internalsubnet-out')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "sourceAddressPrefix": "10.101.0.0/27",
+                "destinationAddressPrefix": "10.101.0.0/27",
+                "access": "Allow",
+                "priority": 3950,
+                "direction": "Outbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-rdp-in')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "3389",
+                "destinationAddressPrefix": "10.101.0.0/27",
+                "access": "Allow",
+                "priority": 1500,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [
+                    "10.0.0.0/8",
+                    "172.16.0.0/12",
+                    "192.168.0.0/16"
+                ],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/allow-rdp-out')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "3389",
+                "sourceAddressPrefix": "10.101.0.0/27",
+                "access": "Allow",
+                "priority": 1500,
+                "direction": "Outbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": [
+                    "10.0.0.0/8",
+                    "172.16.0.0/12",
+                    "192.168.0.0/16"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/block-all-in')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Deny",
+                "priority": 4096,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'), '/block-all-out')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_BRC_UKS_AD1_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Deny",
+                "priority": 4096,
+                "direction": "Outbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        }
+    ]
+}

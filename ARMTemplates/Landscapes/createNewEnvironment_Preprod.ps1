@@ -1,7 +1,7 @@
-$SID = "sh1"
+$SID = "cc2"
 $region = "ukwest"
 
-$subscriptionID = "9617cacf-d020-4b6e-bdf4-5afeea0f3843"
+$subscriptionID = "c8f03d99-7739-4924-b2a7-5b65bcb69481"
 
 if ($subscriptionID -eq "[SUBSCRIPTIONID]") {
     Write-Error -Message "Please update the subscription ID"
@@ -16,17 +16,17 @@ if ($Verbose) {
 }
 
 #Shared resources
-$virtualNetworkResourceGroupName = "RG-SAPPROD"
-$virtualNetworkName = "VNET-SAPPRODUKW"
+$virtualNetworkResourceGroupName = "RG-SAPPREPROD"
+$virtualNetworkName = "VNET-SAPPREPRODUKW"
 $dbsubnetName = "DB01"
 $appsubnetName = "APP01"
 $appASG = "ASG-SAPAPPRDUKW"
 $dbASG = "ASG-SAPDBPRDUKW"
-$keyVaultName="KV-SAPPRDUKW"
+$keyVaultName="KV-SAPPREUKW"
 $adminUserName = "localadmin"
 $keyVaultSecretName="localadmin"
-$diagnosticLogStorageAccount = "sasapbootprdukw"
-$EnvType = "prd"
+$diagnosticLogStorageAccount = "sasapbootpreukw"
+$EnvType = "pre"
 
 $HasPublicIP = $false
 $WebDispatch = $true
@@ -52,7 +52,7 @@ Add-Type -TypeDefinition @"
 [DBType]$Database = [DBType]::HanaProd
 
 #How many ASCS Servers are needed
-$NumberOfASCSServers = 2
+$NumberOfASCSServers = 0
 #Marketplace Template Information for the ASCS Server
 #If ImageID is provided then these fields will be ignored
 $ASCSPublisher = "MicrosoftWindowsServer"
@@ -66,7 +66,7 @@ $ASCSServerImageID = ""
 $ASCSVMSize = "Standard_DS2_v2"
 
 #How many Application Servers are needed
-$NumberOfAppServers = 3
+$NumberOfAppServers = 1
 #Marketplace Template Information for the Application Server
 #If ImageID is provided then these fields will be ignored
 $AppPublisher = "suse"
@@ -85,7 +85,7 @@ $AppServerImageID = ""
 $AppVMSize = "Standard_E4s_v3"
 
 #How many DB Servers are needed
-$NumberOfDatabaseServers = 2
+$NumberOfDatabaseServers = 1
 #Marketplace Template Information for the Database Server
 
 #If ImageID is provided then these fields will be ignored
