@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "sapSystemId": {
-      "value": "sh1"
+      "value": "bw1"
     },
     "adminUsername": {
       "value": "localadmin"
@@ -20,7 +20,7 @@
       }
     },
     "availabilitySetName": {
-      "value": "as-sh1ascsprd"
+      "value": "as-bw1ascsprd"
     },
     "location": {
       "value": "ukwest"
@@ -40,7 +40,7 @@
       "value": [""]
     },
     "proximityPlacementGroupName": {
-      "value": "pp-sh1prd"
+      "value": "pp-bw1prd"
     },
     "publisher": {
       "value": "MicrosoftWindowsServer"

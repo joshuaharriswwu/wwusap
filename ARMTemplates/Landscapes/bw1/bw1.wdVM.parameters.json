@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "sapSystemId": {
-      "value": "sh1"
+      "value": "bw1"
     },
     "adminUsername": {
       "value": "localadmin"
@@ -20,7 +20,7 @@
       }
     },
     "availabilitySetName": {
-      "value": "as-sh1ascsprd"
+      "value": "as-bw1webprd"
     },
     "location": {
       "value": "ukwest"
@@ -40,7 +40,7 @@
       "value": [""]
     },
     "proximityPlacementGroupName": {
-      "value": "pp-sh1prd"
+      "value": "pp-bw1prd"
     },
     "publisher": {
       "value": "MicrosoftWindowsServer"
@@ -58,16 +58,16 @@
       "value": ""
     },
     "virtualMachineCount": {
-      "value": 2
+      "value": 3
     },
     "applicationSecurityGroupName": {
       "value": "ASG-SAPAPPRDUKW"
     },
     "virtualMachineSize": {
-      "value": "Standard_DS2_v2"
+      "value": "Standard_E4s_v3"
     },
     "virtualMachineName": {
-      "value": "ascs"
+      "value": "webdisp"
     },
     "virtualNetworkResourceGroupName": {
       "value": "RG-SAPPROD"

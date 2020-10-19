@@ -2,9 +2,6 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "sapSystemId": {
-      "value": "sh1"
-    },
     "adminUsername": {
       "value": "localadmin"
     },
@@ -19,55 +16,56 @@
         "secretName": "localadmin"
       }
     },
+    "applicationSecurityGroupName": {
+      "value": "ASG-SAPDBPRDUKW"
+    },
     "availabilitySetName": {
-      "value": "as-sh1ascsprd"
+      "value": "as-bw1dbprd"
     },
-    "location": {
-      "value": "ukwest"
-    },
-    "diagnosticsStorageAccount":
-    {
+    "diagnosticsStorageAccount": {
       "value": "sasapbootprdukw"
     },
     "EnvironmentType":{
       "value": "prd"
     },
-
     "HasPublicIP": {
       "value": false
-    },
-    "PrivateIP": {
-      "value": [""]
-    },
-    "proximityPlacementGroupName": {
-      "value": "pp-sh1prd"
-    },
-    "publisher": {
-      "value": "MicrosoftWindowsServer"
-    },
-    "offer": {
-      "value": "WindowsServer"
-    },
-    "sku": {
-      "value": "2016-Datacenter"
-    },
-    "version": {
-      "value": "latest"
     },
     "imageID": {
       "value": ""
     },
+    "location": {
+      "value": "ukwest"
+    },
+    "privateIP": {
+      "value": [""]
+    },
+    "proximityPlacementGroupName": {
+      "value": "pp-bw1prd"
+    },
+    "publisher": {
+      "value": "suse"
+    },
+    "offer": {
+      "value": "sles-sap-15-sp1"
+    },
+    "sku": {
+      "value": "gen1"
+    },
+    "version": {
+      "value": "2020.06.10"
+    },
+    "sapSystemId": {
+      "value": "bw1"
+    },
     "virtualMachineCount": {
       "value": 2
     },
-    "applicationSecurityGroupName": {
-      "value": "ASG-SAPAPPRDUKW"
+    "virtualMachineName": {
+      "value": "db"
     },
     "virtualMachineSize": {
-      "value": "Standard_DS2_v2"
-    },
-    "virtualMachineName": {
-      "value": "ascs"
+      "value": "Standard_M32ls"
     },
     "virtualNetworkResourceGroupName": {
       "value": "RG-SAPPROD"
@@ -76,15 +74,13 @@
       "value": "VNET-SAPPRODUKW"
     },
     "subnetName": {
-      "value": "APP01"
+      "value": "DB01"
     },
     "virtualMachineTagValues": {
       "value": { "System": "SAP", "$perfOptimizationLevel": "1" }
     },
     "Zone": {
-        "value": []
+      "value": []
     }
-
-
   }
 }

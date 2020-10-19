@@ -2,14 +2,11 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "sapSystemId": {
-      "value": "sh1"
+    "applicationSecurityGroupName": {
+      "value": "ASG-SAPAPPRDUKW"
     },
     "adminUsername": {
       "value": "localadmin"
-    },
-    "authenticationType": {
-      "value": "password"
     },
     "adminPasswordOrKey": {
       "reference": {
@@ -19,11 +16,11 @@
         "secretName": "localadmin"
       }
     },
-    "availabilitySetName": {
-      "value": "as-sh1ascsprd"
+    "authenticationType": {
+      "value": "password"
     },
-    "location": {
-      "value": "ukwest"
+    "availabilitySetName": {
+      "value": "as-bw1apprd"
     },
     "diagnosticsStorageAccount":
     {
@@ -36,11 +33,8 @@
     "HasPublicIP": {
       "value": false
     },
-    "PrivateIP": {
-      "value": [""]
-    },
-    "proximityPlacementGroupName": {
-      "value": "pp-sh1prd"
+    "imageID": {
+      "value": ""
     },
     "publisher": {
       "value": "MicrosoftWindowsServer"
@@ -54,37 +48,41 @@
     "version": {
       "value": "latest"
     },
-    "imageID": {
-      "value": ""
+    "location": {
+      "value": "ukwest"
     },
-    "virtualMachineCount": {
-      "value": 2
+    "PrivateIP": {
+      "value": [""]
     },
-    "applicationSecurityGroupName": {
-      "value": "ASG-SAPAPPRDUKW"
+    "proximityPlacementGroupName": {
+      "value": "pp-bw1prd"
     },
-    "virtualMachineSize": {
-      "value": "Standard_DS2_v2"
+    "sapSystemId": {
+      "value": "bw1"
+    },
+    "subnetName": {
+      "value": "APP01"
     },
     "virtualMachineName": {
-      "value": "ascs"
+      "value": "app"
     },
-    "virtualNetworkResourceGroupName": {
-      "value": "RG-SAPPROD"
+    "virtualMachineSize": {
+      "value": "Standard_E4s_v3"
+    },
+    "virtualMachineCount": {
+      "value": 3
     },
     "virtualNetworkName": {
       "value": "VNET-SAPPRODUKW"
     },
-    "subnetName": {
-      "value": "APP01"
+    "virtualNetworkResourceGroupName": {
+      "value": "RG-SAPPROD"
     },
     "virtualMachineTagValues": {
       "value": { "System": "SAP", "$perfOptimizationLevel": "1" }
     },
     "Zone": {
-        "value": []
+      "value": []
     }
-
-
   }
 }
