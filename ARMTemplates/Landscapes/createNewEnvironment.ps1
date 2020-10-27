@@ -1,4 +1,4 @@
-$SID = "bo1"
+$SID = "w01"
 $region = "ukwest"
 
 $subscriptionID = "9617cacf-d020-4b6e-bdf4-5afeea0f3843"
