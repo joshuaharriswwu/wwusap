@@ -67,10 +67,10 @@
       "value": "app"
     },
     "virtualMachineSize": {
-      "value": "Standard_DS4s_v3"
+      "value": "Standard_D4s_v3"
     },
     "virtualMachineCount": {
-      "value": 6
+      "value": 2
     },
     "virtualNetworkName": {
       "value": "VNET-SAPPREPRODUKW"

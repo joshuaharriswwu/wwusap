@@ -43,13 +43,13 @@
       "value": "pp-ot2pre"
     },
     "publisher": {
-      "value": "suse"
+      "value": "MicrosoftWindowsServer"
     },
     "offer": {
-      "value": "sles-sap-12-sp5"
+      "value": "WindowsServer"
     },
     "sku": {
-      "value": "gen1"
+      "value": "2016-Datacenter"
     },
     "version": {
       "value": "latest"

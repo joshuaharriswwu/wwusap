@@ -26,12 +26,6 @@
         "availabilitySetName": {
             "type": "string"
         },
-        "diagnosticsStorageAccount": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of the diagnostics storage account"
-            }
-        },
         "EnvironmentType": {
             "type": "string",
             "defaultValue": "prd",
@@ -43,9 +37,7 @@
             ]
         },
         "imageID": {
-            "type": "string",
-            "defaultValue": null,
-            "minLength": 0
+            "type": "string"
         },
         "publisher": {
             "type": "string"
@@ -87,6 +79,12 @@
                 "description": "The SAP System ID"
             }
         },
+        "diagnosticsStorageAccount": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the diagnostics storage account"
+            }
+        },
         "subnetName": {
             "type": "string",
             "metadata": {
@@ -94,9 +92,13 @@
             },
             "defaultValue": "app-snet"
         },
+        "virtualMachineCount": {
+            "type": "int",
+            "defaultValue": 1
+        },
         "virtualMachineName": {
             "type": "string",
-            "defaultValue": "ascs"
+            "defaultValue": "app"
         },
         "virtualMachineSize": {
             "type": "string",
@@ -104,10 +106,27 @@
                 "Standard_D2s_v3",
                 "Standard_D4s_v3",
                 "Standard_D8s_v3",
-                "Standard_DS2_v2",
-                "Standard_Ea2_v4"
+                "Standard_D16s_v3",
+                "Standard_D32s_v3",
+                "Standard_D48s_v3",
+                "Standard_D64s_v3",
+                "Standard_E2s_v3",
+                "Standard_E4s_v3",
+                "Standard_E8s_v3",
+                "Standard_E16s_v3",
+                "Standard_E20s_v3",
+                "Standard_E32s_v3",
+                "Standard_E48s_v3",
+                "Standard_E64s_v3",
+                "Standard_E64is_v3",
+                "Standard_DS2_v2"
+    
             ],
             "defaultValue": "Standard_D2s_v3"
+        },
+        "virtualMachineTagValues": {
+            "type": "object",
+            "defaultValue": null
         },
         "virtualNetworkName": {
             "type": "string",
@@ -118,14 +137,6 @@
         },
         "virtualNetworkResourceGroupName": {
             "type": "string"
-        },
-        "virtualMachineCount": {
-            "type": "int",
-            "defaultValue": 1
-        },
-        "virtualMachineTagValues": {
-            "type": "object",
-            "defaultValue": null
         },
         "Zone": {
             "type": "array",
@@ -138,8 +149,10 @@
         "osType": "[if(equals(toLower(parameters('offer')),'windowsserver'),'Windows','Linux')]",
         "sapSystemIdLower": "[toLower(parameters('sapSystemId'))]",
         "locationName": "[if(empty(parameters('location')) , resourceGroup().location,parameters('location'))]",
-        "sapMachineName": "[concat('az',if(equals(variables('osType'),'Windows'),'w','l'),parameters('sapSystemId'),'ac', parameters('EnvironmentType'))]",
-        "avSetName": "[if(empty(parameters('availabilitySetName')), concat('as-',variables('sapSystemIdLower'),'ac', parameters('EnvironmentType')),parameters('availabilitySetName'))]",
+        "sapMachineNameOld": "[concat(variables('sapSystemIdLower'),'-',parameters('virtualMachineName'))]",
+        "sapMachineName": "[concat('az',if(equals(variables('osType'),'Windows'),'w','l'),parameters('sapSystemId'),'ap', parameters('EnvironmentType'))]",
+        "avSetNameOld": "[if(empty(parameters('availabilitySetName')), concat(variables('sapSystemIdLower'),'-app-avset'),parameters('availabilitySetName'))]",
+        "avSetName": "[if(empty(parameters('availabilitySetName')), concat('as-',variables('sapSystemIdLower'),'ap', parameters('EnvironmentType')),parameters('availabilitySetName'))]",
         "ppgName": "[if(empty(parameters('proximityPlacementGroupName')), concat('ppg-',variables('sapSystemIdLower')),parameters('proximityPlacementGroupName'))]",
         "vnetID": "[resourceid(parameters('virtualNetworkResourceGroupName') ,'Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
@@ -154,11 +167,12 @@
                 ]
             }
         },
-        "sidTag": {
-            "SID": "[parameters('sapSystemId')]"
-        },
         "envTag": {
             "Environment": "[parameters('EnvironmentType')]"
+        },
+       
+        "sidTag": {
+            "SID": "[parameters('sapSystemId')]"
         },
         "diskSizes": {
             "ASCS": {
@@ -169,9 +183,9 @@
         "nrOfDisks": "[variables('diskSizes')['ASCS'].nrDisks]",
         "allVMTags": "[union(parameters('virtualMachineTagValues'),variables('sidTag'),variables('envTag'))]",
         "applicationSecurityGroupID": "[resourceId(parameters('virtualNetworkResourceGroupName'),'Microsoft.Network/applicationSecurityGroups',parameters('applicationSecurityGroupName'))]",
-        "loadBalancerName": "[concat('lb-std',variables('sapSystemIdLower'),'ac', parameters('EnvironmentType'))]",
         "github": "https://raw.githubusercontent.com/joshuaharriswwu/wwusap/master/ARMTemplates/serverTemplates/",
         "customImage": "[if(greater(length(trim(parameters('imageID'))),2),parameters('imageID'),'')]"
+
     },
     "resources": [
         {
@@ -184,6 +198,7 @@
                 "count": "[if(greater(length(parameters('Zone')),1),2,1)]",
                 "name": "ppgLoop"
             }
+
         },
         {
             "apiVersion": "2018-04-01",
@@ -213,64 +228,27 @@
             ]
         },
         {
-            "name": "[variables('loadBalancerName')]",
-            "type": "Microsoft.Network/loadBalancers",
-            "apiVersion": "2018-12-01",
-            "condition": "[greater(parameters('virtualMachineCount'),1)]",
+            "type": "Microsoft.Compute/availabilitySets",
+            "name": "[concat(variables('avSetName'), padLeft(add(mod(copyIndex(0),2),1),2,'0'))]",
+            "apiVersion": "2018-10-01",
             "location": "[variables('locationName')]",
+            "condition": "[greater(length(parameters('Zone')),1)]",
             "sku": {
-                "name": "Standard"
+                "name": "Aligned"
             },
             "properties": {
-                "frontendIPConfigurations": [
-                    {
-                        "name": "[concat(variables('loadBalancerName'),'-frontend')]",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "subnet": {
-                                "id": "[variables('subnetRef')]"
-                            },
-                            "privateIPAddressVersion": "IPv4"
-                        }
-                    }
-                ],
-                "backendAddressPools": [
-                    {
-                        "name": "[concat(variables('loadBalancerName'),'-backend')]"
-                    }
-                ],
-                "loadBalancingRules": [
-                    {
-                        "name": "HanaLBRule",
-                        "properties": {
-                            "frontendIPConfiguration": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', variables('loadBalancerName'),concat(variables('loadBalancerName'),'-frontend'))]"
-                            },
-                            "backendAddressPool": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadBalancerName'), concat(variables('loadBalancerName'),'-backend'))]"
-                            },
-                            "frontendPort": 0,
-                            "backendPort": 0,
-                            "enableFloatingIP": true,
-                            "idleTimeoutInMinutes": 30,
-                            "protocol": "All",
-                            "probe": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/probes', variables('loadBalancerName'),concat(variables('loadBalancerName'),'-healthprobe'))]"
-                            }
-                        }
-                    }
-                ],
-                "probes": [
-                    {
-                        "name": "[concat(variables('loadBalancerName'),'-healthprobe')]",
-                        "properties": {
-                            "protocol": "Tcp",
-                            "port": 62503,
-                            "intervalInSeconds": 5,
-                            "numberOfProbes": 2
-                        }
-                    }
-                ]
+                "platformFaultDomainCount": 2,
+                "platformUpdateDomainCount": 10,
+                "proximityPlacementGroup": {
+                    "id": "[resourceId('Microsoft.Compute/proximityPlacementGroups',concat(variables('ppgName'),'-', padLeft(add(mod(copyIndex(0),2),1),2,'0')))]"
+                }
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Compute/proximityPlacementGroups/', concat(variables('ppgName'),'-', padLeft(add(mod(copyIndex(0),2),1),2,'0')))]"
+            ],
+            "copy": {
+                "count": "[if(greater(length(parameters('Zone')),1),2,1)]",
+                "name": "ppgLoop"
             }
         },
         {
@@ -278,7 +256,7 @@
             "type": "Microsoft.Network/publicIpAddresses",
             "apiVersion": "2019-02-01",
             "location": "[variables('locationName')]",
-            "zones": "[if(empty(parameters('Zone')), '', json(concat('[',if(greater(length(parameters('Zone')),1),parameters('Zone')[mod(copyIndex(0),2)],parameters('Zone')[0]),']')) )]",
+            "zones": "[if(empty(parameters('Zone')), '', json(concat('[',if(greater(length(parameters('Zone')),1),'',parameters('Zone')[0]),']')) )]",
             "condition": "[parameters('HasPublicIP')]",
             "properties": {
                 "publicIpAllocationMethod": "Static"
@@ -297,8 +275,7 @@
             "apiVersion": "2019-07-01",
             "location": "[variables('locationName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
-                "[concat('pip-',variables('sapMachineName'),padLeft(copyIndex(1),2,'0'))]"
+                "[concat('Microsoft.Network/publicIpAddresses/', concat('pip-',variables('sapMachineName'),padLeft(copyIndex(1),2,'0')))]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -312,8 +289,7 @@
                             "publicIpAddress": "[if(parameters('HasPublicIP'),json(concat('{ \"id\" : \"',resourceId('Microsoft.Network/publicIpAddresses', concat('pip-',variables('sapMachineName'),padLeft(copyIndex(1),2,'0'))),'\"}')), json('null'))]",
                             "primary": true,
                             "privateIPAddressVersion": "IPv4",
-                            "applicationSecurityGroups": "[if(not(empty(variables('applicationSecurityGroupID'))),json(concat('[{ \"id\" : \"',variables('applicationSecurityGroupID'),'\"}]')), json('null'))]",
-                            "loadBalancerBackendAddressPools": "[if(greater(parameters('virtualMachineCount'),1),json(concat('[{ \"id\" : \"',resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadBalancerName'), concat(variables('loadBalancerName'),'-backend')),'\"}]')), json('null'))]"
+                            "applicationSecurityGroups": "[if(not(empty(variables('applicationSecurityGroupID'))),json(concat('[{ \"id\" : \"',variables('applicationSecurityGroupID'),'\"}]')), json('null'))]"
                         }
                     }
                 ],
@@ -333,12 +309,10 @@
             ],
             "apiVersion": "2018-10-01",
             "location": "[variables('locationName')]",
-            "zones": "[if(empty(parameters('Zone')), '', json(concat('[',if(greater(length(parameters('Zone')),1),parameters('Zone')[mod(copyIndex(0),2)],parameters('Zone')[0]),']')) )]",
+            "zones": "[if(empty(parameters('Zone')), '', json(concat('[',if(greater(length(parameters('Zone')),1),'',parameters('Zone')[0]),']')) )]",
             "properties": {
-                "availabilitySet": "[if(empty(parameters('Zone')),json(concat('{ \"id\" : \"',resourceId('Microsoft.Compute/availabilitySets',variables('avSetName')),'\"}')), json('null'))]",
-                "proximityPlacementGroup": {
-                    "id": "[resourceId('Microsoft.Compute/proximityPlacementGroups',if(empty(parameters('Zone')),variables('ppgName'),if(less(length(parameters('Zone')),2),variables('ppgName'),concat(variables('ppgName'),'-', padLeft(add(mod(copyIndex(0),2),1),2,'0')))))]"
-                },
+                "availabilitySet": "[if(empty(parameters('Zone')),json(concat('{ \"id\" : \"',resourceId('Microsoft.Compute/availabilitySets',concat(variables('avSetName'))),'\"}')),if(equals(length(parameters('Zone')),1),json('null'),json(concat('{ \"id\" : \"',resourceId('Microsoft.Compute/availabilitySets',concat(variables('avSetName'),'-',padLeft(copyIndex(1),2,'0'))),'\"}'))))]",
+                "proximityPlacementGroup": "[if(not(empty(parameters('Zone'))),if(and(greater(parameters('virtualMachineCount'),1),greater(length(parameters('Zone')),1)),json(concat('{ \"id\" : \"',resourceId('Microsoft.Compute/proximityPlacementGroups',concat(variables('ppgName'),'-',padLeft( copyIndex(1),2,'0'))),'\"}')), json(concat('{ \"id\" : \"',resourceId('Microsoft.Compute/proximityPlacementGroups',variables('ppgName')),'\"}'))), json(concat('{ \"id\" : \"',resourceId('Microsoft.Compute/proximityPlacementGroups',variables('ppgName')),'\"}')))]",
                 "hardwareProfile": {
                     "vmSize": "[parameters('virtualMachineSize')]"
                 },
@@ -416,7 +390,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(variables('github'),'disks/ASCSVMDisks.json')]",
+                    "uri": "[concat(variables('github'),'/disks/AppVMDisks.json')]",
                     "contentVersion": "1.0.0.0"
                 },
 
@@ -428,12 +402,11 @@
                         "value": "APP"
                     },
                     "location": {
-                        "value": "[parameters('location')]"
+                        "value": "[variables('locationName')]"
                     },
                     "Zone": {
-                        "value": "[if(empty(parameters('Zone')), '', if(greater(length(parameters('Zone')),1),parameters('Zone')[mod(copyIndex(0),2)],parameters('Zone')[0]))]"
+                        "value": "[if(empty(parameters('Zone')), '', if(greater(length(parameters('Zone')),1),'',parameters('Zone')[0]))]"
                     }
-
                 }
             }
         },
@@ -456,25 +429,24 @@
                             "name": "[concat(variables('sapMachineName'),padLeft(copyIndex(1),2,'0'), '-nic01')]",
                             "apiVersion": "2019-06-01",
                             "location": "[parameters('location')]",
+                            "condition": "[parameters('HasPublicIP')]",
                             "properties": {
                                 "ipConfigurations": [
                                     {
                                         "name": "ipconfig1",
                                         "properties": {
                                             "privateIPAllocationMethod": "[if(empty(parameters('PrivateIP')) ,'Dynamic','Static')]",
-                                            "privateIPAddress": "[if(empty(parameters('PrivateIP')) ,'',string(parameters('PrivateIP')[copyIndex()]))]",
+                                            "privateIPAddress": "[if(empty(parameters('PrivateIP')) ,'',parameters('PrivateIP')[copyIndex()])]",
                                             "subnet": {
                                                 "id": "[variables('subnetRef')]"
                                             },
-                                            "publicIpAddress": "[if(parameters('HasPublicIP'),json(concat('{ \"id\" : \"',concat(variables('sapMachineName'),padLeft(copyIndex(1),2,'0'), '-nic01'),'\"}')), json('null'))]",
-                                            "applicationSecurityGroups": "[if(not(empty(parameters('virtualMachineCount'))),json(concat('[{ \"id\" : \"',variables('applicationSecurityGroupID'),'\"}]')), json('null'))]",
-                                            "loadBalancerBackendAddressPools": "[if(greater(parameters('virtualMachineCount'),1),json(concat('[{ \"id\" : \"',resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadBalancerName'), concat(variables('loadBalancerName'),'-backend')),'\"}]')), json('null'))]"
+                                            "publicIpAddress": "[if(parameters('HasPublicIP'),json(concat('{ \"id\" : \"',resourceId('Microsoft.Network/publicIpAddresses', concat('pip-',variables('sapMachineName'),padLeft(copyIndex(1),2,'0'))),'\"}')), json('null'))]",
+                                            "applicationSecurityGroups": "[if(not(empty(variables('applicationSecurityGroupID'))),json(concat('[{ \"id\" : \"',variables('applicationSecurityGroupID'),'\"}]')), json('null'))]"
                                         }
                                     }
                                 ]
                             }
                         }
-
                     ]
                 }
             },
@@ -485,6 +457,5 @@
         }
     ],
     "outputs": {
-
     }
 }
