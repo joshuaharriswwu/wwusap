@@ -120,6 +120,7 @@
                 "Standard_E64s_v3",
                 "Standard_E64is_v3",
                 "Standard_DS2_v2"
+    
             ],
             "defaultValue": "Standard_D2s_v3"
         },

@@ -1,4 +1,4 @@
-$SID = "cc2"
+$SID = "ot2"
 $region = "ukwest"
 
 $subscriptionID = "c8f03d99-7739-4924-b2a7-5b65bcb69481"
@@ -29,7 +29,7 @@ $diagnosticLogStorageAccount = "sasapbootpreukw"
 $EnvType = "pre"
 
 $HasPublicIP = $false
-$WebDispatch = $true
+$WebDispatch = $false
 
 #Get the Key Vault id
 $kv = Get-AzKeyVault -VaultName $keyVaultName
@@ -52,7 +52,7 @@ Add-Type -TypeDefinition @"
 [DBType]$Database = [DBType]::HanaProd
 
 #How many ASCS Servers are needed
-$NumberOfASCSServers = 0
+$NumberOfASCSServers = 2
 #Marketplace Template Information for the ASCS Server
 #If ImageID is provided then these fields will be ignored
 $ASCSPublisher = "MicrosoftWindowsServer"
@@ -66,7 +66,7 @@ $ASCSServerImageID = ""
 $ASCSVMSize = "Standard_DS2_v2"
 
 #How many Application Servers are needed
-$NumberOfAppServers = 1
+$NumberOfAppServers = 0
 #Marketplace Template Information for the Application Server
 #If ImageID is provided then these fields will be ignored
 $AppPublisher = "suse"
@@ -82,10 +82,10 @@ $AppSKUVersion = "latest"
 $AppServerImageID = ""
 
 #VM Size for the application server
-$AppVMSize = "Standard_E4s_v3"
+$AppVMSize = "E2a_v4_standard"
 
 #How many DB Servers are needed
-$NumberOfDatabaseServers = 1
+$NumberOfDatabaseServers = 2
 #Marketplace Template Information for the Database Server
 
 #If ImageID is provided then these fields will be ignored
@@ -97,7 +97,7 @@ $DBSKUVersion = "2020.06.10"
 #If you want to use a marketplace image $xxxxxImageID needs to be an empty string
 #Custom image ID
 $DBServerImageID = ""
-$DBVMSize = "Standard_M32ls"
+$DBVMSize = "Standard_M32ts"
 
 #This only applies for AnyDB
 $DBSize = "51200"

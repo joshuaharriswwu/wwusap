@@ -187,7 +187,7 @@
                         "storageAccountType": null,
                         "sku": "Premium_LRS",
                         "properties": {
-                            "diskSizeGB": 511,
+                            "diskSizeGB": 64,
                             "creationData": {
                                 "createOption": "empty"
                             }
@@ -203,7 +203,7 @@
                         "storageAccountType": null,
                         "sku": "Premium_LRS",
                         "properties": {
-                            "diskSizeGB": 511,
+                            "diskSizeGB": 64,
                             "creationData": {
                                 "createOption": "empty"
                             }
@@ -219,7 +219,7 @@
                         "storageAccountType": null,
                         "sku": "Premium_LRS",
                         "properties": {
-                            "diskSizeGB": 511,
+                            "diskSizeGB": 64,
                             "creationData": {
                                 "createOption": "empty"
                             }
@@ -235,7 +235,7 @@
                         "storageAccountType": null,
                         "sku": "Premium_LRS",
                         "properties": {
-                            "diskSizeGB": 511,
+                            "diskSizeGB": 128,
                             "creationData": {
                                 "createOption": "empty"
                             }
@@ -251,7 +251,7 @@
                         "storageAccountType": null,
                         "sku": "Premium_LRS",
                         "properties": {
-                            "diskSizeGB": 511,
+                            "diskSizeGB": 128,
                             "creationData": {
                                 "createOption": "empty"
                             }
@@ -267,7 +267,7 @@
                         "storageAccountType": null,
                         "sku": "Premium_LRS",
                         "properties": {
-                            "diskSizeGB": 511,
+                            "diskSizeGB": 128,
                             "creationData": {
                                 "createOption": "empty"
                             }
@@ -299,7 +299,7 @@
                         "storageAccountType": null,
                         "sku": "Premium_LRS",
                         "properties": {
-                            "diskSizeGB": 511,
+                            "diskSizeGB": 256,
                             "creationData": {
                                 "createOption": "empty"
                             }
