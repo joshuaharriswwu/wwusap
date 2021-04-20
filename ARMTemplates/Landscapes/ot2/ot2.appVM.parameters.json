@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "applicationSecurityGroupName": {
-      "value": "ASG-SAPAPPRDUKS"
+      "value": "ASG-SAPAPPRDUKW"
     },
     "adminUsername": {
       "value": "localadmin"
@@ -11,7 +11,7 @@
     "adminPasswordOrKey": {
       "reference": {
         "keyVault": {
-          "id": "/subscriptions/9617cacf-d020-4b6e-bdf4-5afeea0f3843/resourceGroups/RG-SAPPRD-KV/providers/Microsoft.KeyVault/vaults/KV-SAPPRDUKW"
+          "id": "/subscriptions/c8f03d99-7739-4924-b2a7-5b65bcb69481/resourceGroups/RG-SAPPRE-KV/providers/Microsoft.KeyVault/vaults/KV-SAPPREUKW"
         },
         "secretName": "localadmin"
       }
@@ -20,14 +20,14 @@
       "value": "password"
     },
     "availabilitySetName": {
-      "value": "as-bw1apprd"
+      "value": "as-ot2appre"
     },
     "diagnosticsStorageAccount":
     {
-      "value": "a2acachestorageuksouth"
+      "value": "sasapbootpreukw"
     },
     "EnvironmentType":{
-      "value": "prd"
+      "value": "pre"
     },
 
     "HasPublicIP": {
@@ -55,10 +55,10 @@
       "value": [""]
     },
     "proximityPlacementGroupName": {
-      "value": "pp-bw1prd"
+      "value": "pp-ot2pre"
     },
     "sapSystemId": {
-      "value": "bw1"
+      "value": "ot2"
     },
     "subnetName": {
       "value": "APP01"
@@ -67,16 +67,16 @@
       "value": "app"
     },
     "virtualMachineSize": {
-      "value": "Standard_E4s_v3"
+      "value": "Standard_DS4s_v3"
     },
     "virtualMachineCount": {
-      "value": 1
+      "value": 6
     },
     "virtualNetworkName": {
-      "value": "VNET-SAPPRODUKS"
+      "value": "VNET-SAPPREPRODUKW"
     },
     "virtualNetworkResourceGroupName": {
-      "value": "RG-SAPPROD"
+      "value": "RG-SAPPREPROD"
     },
     "virtualMachineTagValues": {
       "value": { "System": "SAP", "$perfOptimizationLevel": "1" }

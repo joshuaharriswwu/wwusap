@@ -1,0 +1,180 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location":{
+            "type": "string",
+            "allowedValues": [
+                "Uk South",
+                "Uk West"
+            ]
+        },
+        "virtualMachineName": {
+            "type": "string"
+        },
+        "VMSize": {
+            "type": "string",
+            "metadata": {
+                "description": "Please sleect the Virtual Machine Size"
+            },
+            "defaultValue": "Standard_B2s",
+            "allowedValues": [
+                "Standard_B2s",
+                "Standard_D2s_v3",
+                "Standard_D4_v3",
+                "Standard_D4s_v3"
+            ]
+        },
+        "subnetname": {
+                "type": "string",
+                "metadata": {
+                    "description": "Choose a Subnet"
+                    },
+                "defaultValue": "SharedServices",
+                "allowedValues": [
+                    "APP01",
+                    "DB01"
+                    ]
+                },
+        "adminUsername": {
+            "type": "string"
+        },
+        "adminPassword": {
+            "type": "secureString"
+        }
+    },
+  "variables": {
+    "vnetID":"[if(equals(parameters('location'), 'Uk south'), '/subscriptions/9617cacf-d020-4b6e-bdf4-5afeea0f3843/resourceGroups/RG-SAPPROD/providers/Microsoft.Network/virtualNetworks/VNET-SAPPRODUKS', '/subscriptions/a06b2541-a315-4fea-a5dc-4932897f32b5/resourceGroups/RG-WORKLOADPROD/providers/Microsoft.Network/virtualNetworks/VNET-WORKLOADPRODUKS')]",
+    "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
+    "networkinterfacename": "[concat(parameters('virtualMachineName'), '-NIC01')]",
+    "storageAccount":"[if(equals(parameters('location'), 'Uk South'), 'sasapprduks', 'a2acachestorageuksouth')]"
+  },
+    "resources": [
+        {
+            "name": "[variables('networkinterfacename')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2018-04-01",
+            "location": "[parameters('location')]",
+            
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+
+                        "properties": {
+                            "subnet": {
+                                "id": "[variables('subnetRef')]"
+                            },
+                            "privateIPAllocationMethod": "Dynamic"
+                            
+                        },
+                        
+                    }
+                ]
+                
+            },
+            "tags": {
+                "Environment": "Production",
+                "Business Owner": "Bernie Murphy",
+                "Department": "IT",
+                "Cost Centre": "B726"
+            }
+        },
+        {
+            "name": "[parameters('virtualMachineName')]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2018-04-01",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', variables('networkInterfaceName'))]"
+            ],
+          "properties": {
+            "hardwareProfile": {
+              "vmSize": "[parameters('VMSize')]"
+            },
+            "storageProfile": {
+              "osDisk": {
+                "name": "[concat(parameters('virtualMachineName'), '-DISKOS')]",
+                "createOption": "FromImage",
+                "managedDisk": {
+                  "storageAccountType": "Standard_LRS"
+                }
+
+              },
+
+              "imageReference": {
+                "publisher": "MicrosoftWindowsServer",
+                "offer": "WindowsServer",
+                "sku": "2016-Datacenter",
+                "version": "latest"
+              }
+
+
+
+            },
+            "networkProfile": {
+              "networkInterfaces": [
+                {
+                  "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]"
+                }
+              ]
+            },
+            "osProfile": {
+              "computerName": "[parameters('virtualMachineName')]",
+              "adminUsername": "[parameters('adminUsername')]",
+              "adminPassword": "[parameters('adminPassword')]",
+              "windowsConfiguration": {
+                "enableAutomaticUpdates": true,
+                "provisionVmAgent": true
+              }
+            },
+            "diagnosticsProfile": {
+              "bootDiagnostics": {
+                "enabled": true,
+                "storageUri": "[concat('https://', variables('storageAccount'),'.blob.core.windows.net/')]"
+              }
+            }
+          },
+            "tags": {
+                "Environment": "Production",
+                "Business Owner": "Bernie Murphy",
+                "Department": "IT",
+                "Cost Centre": "B726"
+            }
+        },
+        {
+            "name": "[concat('shutdown-computevm-', parameters('virtualMachineName'))]",
+            "type": "Microsoft.DevTestLab/schedules",
+            "apiVersion": "2017-04-26-preview",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
+            ],
+            "properties": {
+                "status": "Disabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                    "time": "18:00"
+                },
+                "timeZoneId": "GMT Standard Time", 
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachineName'))]",
+                "notificationSettings": {
+                    "status": "Disabled",
+                    "timeInMinutes": "30"
+                }
+            },
+            "tags": {
+                "Environment": "Production",
+                "Business Owner": "Bernie Murphy",
+                "Department": "IT",
+                "Cost Centre": "B726"
+            }
+        }
+    ],
+    "outputs": {
+        "adminUsername": {
+            "type": "string",
+            "value": "[parameters('adminUsername')]"
+        }
+    }
+}
