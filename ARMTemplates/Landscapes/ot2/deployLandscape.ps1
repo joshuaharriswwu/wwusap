@@ -83,13 +83,31 @@ Write-Host "Creating Db Server(s)"
 $res = New-AzResourceGroupDeployment -Name "DbServer_Creation" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\hanaProdVM.json -TemplateParameterFile .\ot2.hanaProdVM.parameters.json 
 if ($res.ProvisioningState -ne "Succeeded") { 
   Write-Error -Message "The deployment failed" 
-}T
+}
 
 
 Write-Host "Provisioning the AC Server(s)"
 
-Write-Host "Creating TC Server(s)"
+Write-Host "Creating AC Server(s)"
 $res = New-AzResourceGroupDeployment -Name "ASCSServer_Creation" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\OTAC.json -TemplateParameterFile .\ot2.acVM.parameters.json 
+if ($res.ProvisioningState -ne "Succeeded") { 
+  Write-Error -Message "The deployment failed" 
+}
+
+
+Write-Host "Provisioning the CS Server(s)"
+
+Write-Host "Creating CS Server(s)"
+$res = New-AzResourceGroupDeployment -Name "ASCSServer_Creation" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\OTCS.json -TemplateParameterFile .\ot2.csVM.parameters.json 
+if ($res.ProvisioningState -ne "Succeeded") { 
+  Write-Error -Message "The deployment failed" 
+}
+
+
+Write-Host "Provisioning the DS Server(s)"
+
+Write-Host "Creating DS Server(s)"
+$res = New-AzResourceGroupDeployment -Name "ASCSServer_Creation" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\OTDS.json -TemplateParameterFile .\ot2.DSVM.parameters.json 
 if ($res.ProvisioningState -ne "Succeeded") { 
   Write-Error -Message "The deployment failed" 
 }
@@ -99,6 +117,15 @@ Write-Host "Provisioning the Application Server(s)"
 
 Write-Host "Creating App Server(s)"
 $res = New-AzResourceGroupDeployment -Name "AppServer_Creation-app" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\AppVM.json -TemplateParameterFile .\ot2.AppVM.parameters.json 
+if ($res.ProvisioningState -ne "Succeeded") { 
+  Write-Error -Message "The deployment failed" 
+}
+
+
+Write-Host "Provisioning the BCC Server(s)"
+
+Write-Host "Creating BCC Server(s)"
+$res = New-AzResourceGroupDeployment -Name "AppServer_Creation-app" -ResourceGroupName $ResourceGroupName -TemplateFile ..\..\servertemplates\BCCVM.json -TemplateParameterFile .\ot2.BCCVM.parameters.json 
 if ($res.ProvisioningState -ne "Succeeded") { 
   Write-Error -Message "The deployment failed" 
 }
