@@ -175,7 +175,7 @@
             },
             "Standard_M32ts": {
                 "osdiskSizeGB": 63,
-                "nrDisks": 8,
+                "nrDisks": 9,
                 "lvm": "hana-lvm-3datadisks2logdisks.sh"
 
             },
