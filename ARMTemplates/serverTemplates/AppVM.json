@@ -150,7 +150,7 @@
         "sapSystemIdLower": "[toLower(parameters('sapSystemId'))]",
         "locationName": "[if(empty(parameters('location')) , resourceGroup().location,parameters('location'))]",
         "sapMachineNameOld": "[concat(variables('sapSystemIdLower'),'-',parameters('virtualMachineName'))]",
-        "sapMachineName": "[concat('az',if(equals(variables('osType'),'Windows'),'w','l'),parameters('sapSystemId'),'app', parameters('EnvironmentType'))]",
+        "sapMachineName": "[concat('az',if(equals(variables('osType'),'Windows'),'w','l'),parameters('sapSystemId'),'ap', parameters('EnvironmentType'))]",
         "avSetNameOld": "[if(empty(parameters('availabilitySetName')), concat(variables('sapSystemIdLower'),'-app-avset'),parameters('availabilitySetName'))]",
         "avSetName": "[if(empty(parameters('availabilitySetName')), concat('as-',variables('sapSystemIdLower'),'ap', parameters('EnvironmentType')),parameters('availabilitySetName'))]",
         "ppgName": "[if(empty(parameters('proximityPlacementGroupName')), concat('ppg-',variables('sapSystemIdLower')),parameters('proximityPlacementGroupName'))]",
